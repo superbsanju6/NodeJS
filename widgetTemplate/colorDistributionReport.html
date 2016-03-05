@@ -1,0 +1,35 @@
+﻿<div id="spinnerColorDistributionReport"></div>
+<div id="containerColorDistributionReport" class="reportContainer"></div>
+<script type='text/javascript'>
+    changeScroll();
+    var spinner = createSpinner();
+    var report221;
+    function createSpinner() {
+        var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+        var container = $("#spinnerColorDistributionReport");
+        var spinner = new Spinner(opts).spin(container[0]);
+        $(container[0]).data('spinner', spinner);
+        return container;
+    }
+    visualize({
+        auth: {
+            name: "improve",
+            password: "improveamirotechapp"
+        }
+    }, function (v) {
+         report221 = v.report({
+            resource: "/Adrian/Color_Distribution_Report",
+            container: "#containerColorDistributionReport",
+            success: function () {
+                $("#spinnerColorDistributionReport").hide();
+                console.log("success");
+            },
+            error: function (e) { alert(e); }
+        });
+
+    });
+
+
+
+
+</script>

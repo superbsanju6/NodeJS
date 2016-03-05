@@ -1,0 +1,559 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3 col-wide-2">
+        <div class="form-group-sm">
+            <label for="student_remediation_district">Choose a District</label>
+            <input id="student_remediation_district">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3 col-wide-2">
+        <div class="form-group-sm">
+            <label for="student_remediation_school">Choose a School</label>
+            <input id="student_remediation_school">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3 col-wide-2">
+        <div class="form-group-sm">
+            <label for="student_remediation_teacher">Choose a Teacher</label>
+            <input id="student_remediation_teacher">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3 col-wide-2">
+        <div class="form-group-sm">
+            <label for="student_remediation_class">Choose a Test</label>
+            <input id="student_remediation_class">
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport37()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button37">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="spinnerNewNewStudentRemediation"></div>
+<div id="new_student_remediation_DIV" class="reportContainer"></div>
+
+<button id="btnForNewStudentRemediationReportModal" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#infoNewStudentRemediationReportAtClick" style="display:none;">Modal</button>
+
+<!-- Modal -->
+<div class="modal fade modal-drill" id="infoNewStudentRemediationReportAtClick" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modalTitle">Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body" id="modalBodyNewStudentRemediationReport">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--<div id="drilldownreport" style="position:absolute;top:25%;left:25%;"></div>-->
+<!--<div class="row exportForm">
+    <div class="col-md-6">
+        <div class="form-group-sm">
+            <button id="button37">Export</button>
+        </div>
+    </div>
+</div>-->
+
+<script type='text/javascript'>
+    changeScroll();
+    //changeScrollModal();
+
+        var viewReport37;
+        var report37;
+
+        $(document).ready(function () {
+            sessionService();
+            $('.modal-drill').on('shown.bs.modal', function () {
+                window.dispatchEvent(new Event('resize'));
+            });
+            //logReportMessage("Ran Student Remediation Report");
+
+            var reportUri37 = "/Polk_County_Reporting/Reports/Teacher/Student_Remediation";
+            var inputUri37 = "/Polk_County_Reporting/Reports/Teacher/Student_Remediation";
+            var inputControls37;
+            var vv37;
+            var report37FirstDisplay = true;
+            var spinner = createSpinner();
+            function createSpinner() {
+                var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+                var container = $("#spinnerNewNewStudentRemediation");
+                var spinner = new Spinner(opts).spin(container[0]);
+                $(container[0]).data('spinner', spinner);
+                return container;
+            }
+
+            var isButtonReport = false;
+
+            viewReport37 = function () {
+                sessionService();
+                if ($("#student_remediation_district").combobox('getText') != "---" && $("#student_remediation_district").combobox('getText').length > 0 &&
+              $("#student_remediation_school").combobox('getText') != "---" && $("#student_remediation_school").combobox('getText').length > 0 &&
+              $("#student_remediation_teacher").combobox('getText') != "---" && $("#student_remediation_teacher").combobox('getText').length > 0 &&
+               $("#student_remediation_class").combobox('getText') != "---" && $("#student_remediation_class").combobox('getText').length > 0)
+                {
+
+                    $("#spinnerNewNewStudentRemediation").show();
+                    report37 = vv37.report({
+                        resource: "/Polk_County_Reporting/Reports/Teacher/Student_Remediation",
+                        container: "#new_student_remediation_DIV",
+                        params: getSelection37(),
+                        linkOptions: {
+                            beforeRender: function (linkToElemPairs) {
+                                linkToElemPairs.forEach(showCursor);
+                            },
+                            events: {
+                                "click": function (ev, link) {
+                                    $("#spinnerNewNewStudentRemediation").show();
+                                    sessionService();
+                                    if (link.type == "ReportExecution") {
+                                        
+
+                                        client.search({
+                                            index: 'allst',
+                                            size: 1,
+                                            body: {
+                                                "fields": ["studentId", "fullname"],
+                                                "query": {
+                                                    "bool": {
+                                                        "must": [{
+                                                            "query_string": {
+                                                                "query": "studentId:" + link.parameters.studentId
+                                                            }
+                                                        }]
+                                                    }
+                                                }
+                                            }
+                                        }).then(function (response) {
+                                            for (var i in response.hits.hits) {
+                                                var fields = (response.hits.hits[i]).fields;
+
+                                                var tmpId = fields["studentId"];
+                                                console.log(tmpId[0]);
+                                                window.localStorage['stdId'] = tmpId[0];
+                                                window.localStorage['stdName'] = fields['fullname'][0];
+                                                $("#spinnerNewNewStudentRemediation").hide();
+                                                window.open('#/tabStudentProfile');
+
+                                            }
+
+                                        });
+                                      
+
+
+                                        //vv37("#modalBodyNewStudentRemediationReport").report({
+                                        //    resource: link.parameters._report,
+                                        //    params: {
+                                        //        "districtId": [link.parameters.districtId],
+                                        //        "region": [link.parameters.region],
+                                        //        "schoolIds": [link.parameters.schoolIds],
+                                        //        "testType": [link.parameters.testType],
+                                        //        "testId": [link.parameters.testId],
+
+                                        //        "schoolId": [link.parameters.schoolId],
+                                        //        "teacherId": [link.parameters.teacherId],
+                                        //        "classId": [link.parameters.classId],
+                                        //        "studentId": [link.parameters.studentId]
+                                        //        //parStoreId: [link.parameters.parStoreId],
+                                        //    },
+
+
+                                        //    events: {
+                                        //        reportCompleted: function (status) {
+                                        //            $("#spinnerNewNewStudentRemediation").hide();
+                                        //            $('.modalTitle').html("Student Profile");
+                                        //            $('#btnForNewStudentRemediationReportModal').click();
+                                        //            //document.getElementById("infoNewStudentRemediationReportAtClick").showModal();
+                                        //        }
+                                        //    },
+                                        //    error: function (error) {
+                                        //        logReportMessage("Error Running Student Profile From Modal");
+                                        //        console.log(error);
+                                        //    }
+
+                                        //});
+                                    }
+                                    console.log(link);
+                                }
+                            }
+                        },
+                        success: function () {
+                            $("#spinnerNewNewStudentRemediation").hide();
+
+                        },
+                        error: function (error) {
+                            logReportMessage("Error Running Student Remediation Report");
+                            console.log(error);
+                        }
+
+                    });
+
+
+                    var new_student_remediation_report_param =
+                      {
+                          'new_student_remediation_report_param': [{
+
+                              'param1': $("#student_remediation_district").combobox('getValue'),
+                              'param2': $("#student_remediation_school").combobox('getValue'),
+                              'param3': $("#student_remediation_teacher").combobox('getValue'),
+                              'param4': $("#student_remediation_class").combobox('getValue')
+                          }]
+
+                      };
+
+                    logReportMessage("Ran Student Remediation Report with following parameters: District-" + $("#student_remediation_district").combobox('getText') +
+                   " School- " + $("#student_remediation_school").combobox('getText') +
+                   " Teacher- " + $("#student_remediation_teacher").combobox('getText') +
+                   " Class- " + $("#student_remediation_class").combobox('getText'));
+
+                    var oldLocalStorage;
+                    if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                        oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                        for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                            if (oldLocalStorage[i].new_student_remediation_report_param) {
+                                oldLocalStorage.splice(i, 1);
+
+                            }
+
+                        }
+
+                    }
+                    else {
+                        var x = [
+                            {
+                                'new_student_remediation_report_param': [{
+                                    'param1': '',
+                                    'param2': '',
+                                    'param3': '',
+                                    'param4': ''
+                                }]
+
+                            }
+                        ];
+                    }
+
+                    oldLocalStorage.push(new_student_remediation_report_param);
+
+                    var beforesave = JSON.stringify(oldLocalStorage);
+                    localStorage.setItem('storageParam', beforesave);
+                    saveToLocalStorage();
+                }
+                else {
+                    alert("Please select all parameter in order to view Student Remediation Report");
+                }
+            };
+
+            function showCursor(pair) {
+
+                var el = pair.element;
+
+                el.style.cursor = "pointer";
+
+            }
+            visualize({
+                auth: {
+                    name: "improve",
+                    password: "improveamirotechapp"
+                }
+            }, function (v) {
+                vv37 = v;
+                inputControls37 = v.inputControls({
+                    resource: inputUri37,
+                    success: renderInputControls37,
+                    error: function (error) {
+                        logReportMessage("Error Loading Input Controls For Student Remediation Report");
+                        console.log(error);
+                    }
+                });
+
+                var reportExports = ["pdf", "xls", "csv", "docx"];
+                $select37 = buildControl("Export to: ", reportExports, 'select37');
+                $button37 = $("#button37");
+
+                $button37.click(function () {
+                    sessionService();
+                    console.log($select37.val());
+                    report37.export({
+                        //export options here
+                        outputFormat: $select37.val(),
+                        //exports all pages if not specified
+                        //pages: "1-2"
+                    }, function (link) {
+                        var url = link.href ? link.href : link;
+                        window.location.href = url;
+                    }, function (error) {
+                        console.log(error);
+                    });
+                });
+
+                function buildControl(name, options, selectID) {
+
+                    function buildOptions(options) {
+                        var template = "<option>{value}</option>";
+                        return options.reduce(function (memo, option) {
+                            return memo + template.replace("{value}", option);
+                        }, "")
+                    }
+
+                    var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                        content = template.replace("{label}", name)
+                            .replace("{options}", buildOptions(options));
+
+                    var $control = $(content);
+                    $control.insertAfter($("#button37"));
+                    //return select
+                    return $($control[1]);
+                }
+
+            });
+            function getSelection37() {
+
+                return {
+                    "districtId": $("#student_remediation_district").combobox('getValues'),
+                    "schoolId": $("#student_remediation_school").combobox('getValues'),
+                    "teacherId": $("#student_remediation_teacher").combobox('getValues'),
+                    "classId": $("#student_remediation_class").combobox('getValues')
+
+                }
+            }
+            function updateCascade37() {
+                $("#spinnerNewNewStudentRemediation").show();
+
+                inputControls37
+                        .params(getSelection37())
+                        .run()
+                        .then(renderInputControls37)
+                        .then(function () {
+
+                            $('#spinnerNewNewStudentRemediation').hide();
+                        });
+            }
+            function showSpinner() {
+                $('#spinnerNewNewStudentRemediation').show();
+            }
+            function renderInputControls37(data) {
+                $("#student_remediation_district").empty();
+                $("#student_remediation_school").empty();
+                $("#student_remediation_teacher").empty();
+                $("#student_remediation_class").empty();
+
+
+                var isInLocalStorage = false;
+                var oldLocalStorage;
+                if (report37FirstDisplay) {
+
+                    getDataFromServer();
+                }
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+                }
+                else {
+                    var x = [
+                        {
+                            'new_student_remediation_report_param': [{
+                                'param1': '',
+                                'param2': '',
+                                'param3': '',
+                                'param4': ''
+
+                            }]
+
+                        }
+                    ];
+
+                    var beforesave = JSON.stringify(x)
+                    localStorage.setItem("storageParam", beforesave);
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                }
+
+
+
+                for (var i = 0; i < oldLocalStorage.length; i++) {
+                    if (!report37FirstDisplay) {
+
+                        break;
+                    }
+
+
+
+                    if (oldLocalStorage[i].new_student_remediation_report_param) {
+                        if (oldLocalStorage[i].new_student_remediation_report_param[0].param1 == null ||
+                       oldLocalStorage[i].new_student_remediation_report_param[0].param2 == null ||
+                       oldLocalStorage[i].new_student_remediation_report_param[0].param3 == null ||
+                       oldLocalStorage[i].new_student_remediation_report_param[0].param4 == null ) {
+
+                            break;
+                        }
+
+                        isInLocalStorage = true;
+
+
+                        var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                        var select = $("#student_remediation_district");
+                        _.each(DistrictInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].new_student_remediation_report_param[0].param1) {
+                                option.selected = true;
+                            }
+                            else {
+                                option.selected = false;
+                            }
+                        });
+                        $("#student_remediation_district").combobox({
+                            data: DistrictInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade37
+                        });
+
+
+                        // function
+                        inputControls37.params({
+                            "districtId": [oldLocalStorage[i].new_student_remediation_report_param[0].param1],
+                            "schoolId": [oldLocalStorage[i].new_student_remediation_report_param[0].param2],
+                            "teacherId": [oldLocalStorage[i].new_student_remediation_report_param[0].param3],
+                            "classId": [oldLocalStorage[i].new_student_remediation_report_param[0].param4]
+                        }).run(function (inputcontrolArray) {
+                            // debugger;
+
+                            var SchoolInputControl = _.findWhere(inputcontrolArray, { id: "schoolId" });
+                            var select = $("#student_remediation_school");
+                            _.each(SchoolInputControl.state.options, function (option) {
+                                if (option.value == oldLocalStorage[i].new_student_remediation_report_param[0].param2) {
+                                    option.selected = true;
+
+                                }
+                                else {
+                                    option.selected = false;
+
+                                }
+
+                            });
+                            $("#student_remediation_school").combobox({
+                                data: SchoolInputControl.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: false,
+                                onSelect: updateCascade37
+                            });
+
+                            var TeacherInputControl = _.findWhere(inputcontrolArray, { id: "teacherId" });
+                            var select = $("#student_remediation_teacher");
+                            _.each(TeacherInputControl.state.options, function (option) {
+                                if (option.value == oldLocalStorage[i].new_student_remediation_report_param[0].param3) {
+                                    option.selected = true;
+
+                                }
+                                else {
+                                    option.selected = false;
+
+                                }
+                            });
+                            $("#student_remediation_teacher").combobox({
+                                data: TeacherInputControl.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: false,
+                                onSelect: updateCascade37
+                            });
+
+                            var ClassInputControl = _.findWhere(inputcontrolArray, { id: "classId" });
+                            var select = $("#student_remediation_class");
+                            _.each(ClassInputControl.state.options, function (option) {
+                                if (option.value == oldLocalStorage[i].new_student_remediation_report_param[0].param4) {
+                                    option.selected = true;
+
+                                }
+                                else {
+                                    option.selected = false;
+
+                                }
+                            });
+                            $("#student_remediation_class").combobox({
+                                data: ClassInputControl.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: false,
+                                onSelect: updateCascade37
+                            });
+
+                            viewReport37();
+                        });
+                        report37FirstDisplay = false;
+
+                        break;
+
+                    }
+
+                }
+                if (!isInLocalStorage) {
+
+                    console.log(data);
+                    var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                    var select = $("#student_remediation_district");
+                    $("#student_remediation_district").combobox({
+                        data: DistrictInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade37
+                    });
+
+                    var SchoolInputControl = _.findWhere(data, { id: "schoolId" });
+                    var select = $("#student_remediation_school");
+                    $("#student_remediation_school").combobox({
+                        data: SchoolInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade37
+                    });
+
+                    var TeacherInputControl = _.findWhere(data, { id: "teacherId" });
+                    var select = $("#student_remediation_teacher");
+                    $("#student_remediation_teacher").combobox({
+                        data: TeacherInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade37
+                    });
+
+                    var ClassInputControl = _.findWhere(data, { id: "classId" });
+                    var select = $("#student_remediation_class");
+                    $("#student_remediation_class").combobox({
+                        data: ClassInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade37
+                    });
+
+                }
+                report37FirstDisplay = false;
+                $("#spinnerNewNewStudentRemediation").hide();
+            }
+        });
+</script>

@@ -1,0 +1,114 @@
+﻿
+
+    <div class="row theReport">
+        <div class="col-md-12">
+            <div class="panel">
+                <div id="reportName" class="panel-heading">Student Profile</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row chartUpperBtns" style="margin-top:12px;">
+                                <div class="col-md-12 clearfix">
+                                    <div class="row newExportForm">
+                                        <div class="col-md-12">
+                                            <div class="form-inline text-right">
+                                                <div class="form-group">
+                                                    <button class="exportRepBtn" id="button101">Export</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="containerTabStudent" class="reportContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="spinnerTabStudentProfile"></div>
+
+<script type='text/javascript'>
+   
+    $(document).ready(function () {
+        var str = window.localStorage['stdName'];
+        str = str.split("(")[0];
+        document.title = str;
+        //document.title = window.localStorage['stdName'];
+        sessionService();
+        $('#reportName').html(window.localStorage['stdName']);
+        logReportMessage("Ran Student Profile Report");
+        var stdId = window.localStorage['stdId'];
+        console.log(stdId);
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerTabStudentProfile");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        };
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        },
+        function (v) {
+            report101 = v.report({
+                resource: "/Polk_County_Reporting/Reports/Student/Student_Profile",
+                container: "#containerTabStudent",
+                params: getSelection101(),
+                success: function () {
+                    $("#spinnerTabStudentProfile").hide();
+                },
+                error: function (error) {
+                    logReportMessage("Error Running Student Profile Report");
+                    console.log(error);
+                }
+            });//map_canvas_2010355477
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $selectStudent = buildControl("Export to: ", reportExports, 'selectStudent');
+            $button101 = $("#button101");
+            $button101.click(function () {
+                sessionService();
+                console.log($selectStudent.val());
+                report101.export({
+                    //export options here
+                    outputFormat: $selectStudent.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+            function getSelection101() {
+                return {
+                    "studentId": [stdId]
+                }
+            }
+        }
+        );
+        function buildControl(name, options, selectID) {
+            function buildOptions(options) {
+                var template = "<option>{value}</option>";
+                return options.reduce(function (memo, option) {
+                    return memo + template.replace("{value}", option);
+                }, "")
+            }
+            var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                content = template.replace("{label}", name)
+                    .replace("{options}", buildOptions(options));
+
+            var $control = $(content);
+            $control.insertAfter($("#button101"));
+            //return select
+            return $($control[1]);
+        }
+    });
+</script>

@@ -1,0 +1,168 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_at_risk_student_teacher7">Select Teacher</label>
+            <select id="teacher_at_risk_student_teacher7"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_at_risk_student_class7">Select Class</label>
+            <select id="teacher_at_risk_student_class7"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_at_risk_student_test7">Select Test</label>
+            <select id="teacher_at_risk_student_test7"></select>
+        </div>
+    </div>
+</div>
+        
+<div id="spinnerMasteryteacher_at_risk_student_test7"></div>
+<div id="teacher_at_risk_student_test_DIV7" class="reportContainer"></div>
+<div class="row exportForm">
+    <div class="col-md-6">
+        <div class="form-group-sm">
+            <button id="button6">Export</button>
+        </div>
+    </div>
+</div>
+
+
+<script type='text/javascript'>
+    changeScroll();
+    var reportUri = "/Polk/Reports/Student_Performance_Report__Crosstab_";
+    var report6, inputControls6;
+    var spinner = createSpinner();
+    function createSpinner() {
+        var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+        var container = $("#spinnerMasteryteacher_at_risk_student_test7");
+        var spinner = new Spinner(opts).spin(container[0]);
+        $(container[0]).data('spinner', spinner);
+        return container;
+    }
+    visualize({
+        auth: {
+            name: "improve",
+            password: "improveamirotechapp"
+        }
+    }, function (v) {
+        inputControls6 = v.inputControls({
+            resource: reportUri,
+            success: renderInputControls
+        });
+        $('#teacher_at_risk_student_class7').on("change", updateCascade);
+        $('#teacher_at_risk_student_teacher7').on("change", updateCascade);
+        $('#teacher_at_risk_student_test7').on("change", updateCascade);
+
+        var reportExports = ["pdf", "xls", "csv", "docx"];
+        $select6 = buildControl("Export to: ", reportExports, 'select6'),
+        $button6 = $("#button6"),
+        report6 = v.report({
+            resource: "/Polk/Reports/Student_Performance_Report__Crosstab_",
+            container: "#teacher_at_risk_student_test_DIV7",
+            success: function () {
+
+                $('#spinnerMasteryteacher_at_risk_student_test7').hide();
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+        $button6.click(function () {
+            console.log($select6.val());
+            report6.export({
+                //export options here
+                outputFormat: $select6.val(),
+                //exports all pages if not specified
+                //pages: "1-2"
+            }, function (link) {
+                var url = link.href ? link.href : link;
+                window.location.href = url;
+            }, function (error) {
+                console.log(error);
+            });
+        });
+
+        function buildControl(name, options, selectID) {
+
+            function buildOptions(options) {
+                var template = "<option>{value}</option>";
+                return options.reduce(function (memo, option) {
+                    return memo + template.replace("{value}", option);
+                }, "")
+            }
+
+            var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                content = template.replace("{label}", name)
+                    .replace("{options}", buildOptions(options));
+
+            var $control = $(content);
+            $control.insertBefore($("#button6"));
+            //return select
+            return $($control[1]);
+        }
+
+    });
+    function getSelection() {
+
+        return {
+            "classKey": [$("#teacher_at_risk_student_class7").val()],
+            "teacherKey": [$("#teacher_at_risk_student_teacher7").val()],
+            "ibtpTestKey": [$("#teacher_at_risk_student_test7").val()],
+
+        }
+    }
+    function updateCascade() {
+        inputControls6
+                .params(getSelection())
+                .run()
+                .then(showSpinner(), renderInputControls)
+                .then(function () {
+
+                    report6.params(getSelection()).run();
+                    $('#spinnerMasteryteacher_at_risk_student_test7').hide();
+                });
+    }
+    function showSpinner() {
+        $('#spinnerMasteryteacher_at_risk_student_test7').show();
+    }
+    function renderInputControls(data) {
+        $("#teacher_at_risk_student_class7").empty();
+        $("#teacher_at_risk_student_teacher7").empty();
+        $("#teacher_at_risk_student_test7").empty();
+
+
+        console.log(data);
+        var TestInputControl = _.findWhere(data, { id: "classKey" });
+        var select = $("#teacher_at_risk_student_class7");
+        _.each(TestInputControl.state.options, function (option) {
+            select.append(
+    "<option " +
+    (option.selected ? "selected" : "") +
+    " value='" + option.value + "'>"
+    + option.label + "</option>"
+    );
+
+
+        });
+        var TestInputControl7 = _.findWhere(data, { id: "ibtpTestKey" });
+        var select = $("#teacher_at_risk_student_test7");
+        _.each(TestInputControl7.state.options, function (option) {
+            select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+        });
+
+
+
+
+        var SchoolInputControl = _.findWhere(data, { id: "teacherKey" });
+        var select = $("#teacher_at_risk_student_teacher7");
+        _.each(SchoolInputControl.state.options, function (option) {
+            select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+        });
+
+
+    }
+</script>

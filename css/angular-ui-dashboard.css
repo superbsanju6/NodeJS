@@ -1,0 +1,560 @@
+.theDashboard{
+    float:left;
+    width:100%
+}
+.theDashboard>div{
+    float:left;
+    width:100%
+}
+.theDashboard .btn-toolbar{
+    padding:24px 0 12px 15px;
+}
+.btn-toolbar-filters{
+    float:right;
+    padding:24px 15px 12px 0px;
+}
+.btn-toolbar-filters .form-group{
+    width:19.6%;
+    min-width:160px;
+    text-align:right;
+}
+.btn-toolbar-filters label{
+    font-weight:400
+}
+.btn-toolbar-filters select{
+    width:90%
+}
+.dashboard-widget-area {
+    margin: 10px 0px 30px 0px;
+    min-height: 200px;
+    position:relative;
+    float:left;
+    width:100%
+}
+.ui-sortable-helper{
+    opacity:.6
+}
+.ui-sortable-placeholder,
+.sortable-placeholder{
+    /*min-width:332px;*/
+    /*width:33% !important;*/
+    margin:0 !important;
+    padding:0 !important;
+    min-height: 249px;
+    visibility:visible !important;
+    margin:0 0px 15px 0px !important;
+    position:relative !important; 
+    background:#efefef;
+    box-sizing:border-box;
+    border:1px dashed #ccc
+
+}
+.theAdmin .widget-container{
+    height:640px;
+}
+.widget-container {
+    min-width:332px !important;
+    max-width:100%;
+    margin:0 0 15px 0;
+    position:relative;
+    box-sizing:border-box;
+    padding:0 6px;
+ }
+.theReports .panel,
+.widget.panel {
+    background-color: transparent;
+    border-radius:1px;
+    position: relative;
+    height: 100%;
+    float:none;
+    padding:0 1px 0 0;
+    border-bottom:1px solid #99cc66 !important;
+    overflow:hidden;
+    margin:0;
+}
+.panel-body,
+.panel .panel-body.widget-content {
+    border: #99cc66 1px solid;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    background-color: #fff;
+    background-image: url(../img/panelBg.png);
+    background-repeat: repeat-x;
+    background-position: 0 0;
+    box-sizing:border-box;
+    padding:0 10px;
+    overflow: hidden;
+    max-height:calc(100% - 47px) !important;
+    min-height:calc(100% - 47px) !important;
+    height:100% !important;
+}
+.theReports .panel-body{
+    padding:0;
+}
+.theAdmin .panel-body{
+    padding:10px;
+}
+.theReports .panel-body,
+.panel .panel-body.widget-content{
+    border-bottom:0 none;
+}
+.panel .panel-body.widget-content>div{
+    height:100%
+}
+.theDashboard>div.theAdmin{
+    width:initial;
+    float:none
+}
+div.ag-fresh{
+    height:533px;
+}
+.widget-header.panel-heading{
+    cursor:move;
+}
+.panel-heading{
+    background: url(../img/bg_portletheader.jpg) no-repeat left #c3e378 !important;
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    border: 1px solid #cccc66 !important;
+    margin-bottom: 2px;
+    padding: 0 0 0 10px;
+    height: 45px;
+    line-height: 45px;
+    min-height: 45px;
+    font-size: 15px;
+    font-weight: bold;
+    overflow: hidden;
+}
+.panel-title{
+    font-weight:bold;
+    line-height:45px;
+}
+.theReport .reportContainer {
+    height:auto !important;
+    min-height:360px;
+    padding-bottom:30px;
+}
+.reportContainer {
+    overflow: auto;
+    height: calc(100% - 105px);
+}
+.reportContainer.reportShorter{
+    height:calc(100% - 150px)
+}
+.reportContainer .jrPage {
+    width: 100% !important;
+    margin:0 auto !important;
+}
+#new_District_Standard_Mastery_Report_DIV .jrPage,
+#new_student_remediation_DIV .jrPage,
+#new_District_Standard_Proficiency_DIV .jrPage,
+#teacher_Item_Analysis_Report_DIV .jrPage,
+#new_student_roster_DIV .jrPage,
+#teacher_Average_WidgetDIV .jrPage,
+#teacher_District_Average_WidgetDIV .jrPage,
+#teacher_School_Average_WidgetDIV .jrPage,
+#teacher_Class_Average_WidgetDIV .jrPage,
+#new_Item_Analysis_Report_DIV .jrPage,
+#new_school_standard_proficiency_DIV .jrPage,
+#new_student_test_progress_DIV .jrPage,
+#new_class_standard_proficiency_DIV .jrPage,
+#modalBodyNewSchoolStandardProficiencyReport .jrPage,
+#modalBodyNewTestPerformanceReport .jrPage,
+#teacher_New_School_Test_Performance_WidgetDIV .jrPage,
+#infoNewDashboardReportAtClick .jrPage,
+#modalBodyNewClassStandardProficiencyReport .jrPage,
+#modalBodyNewDistrictStandardProficiencyReport .jrPage,
+#containerTabStudent .jrPage,
+#containerTabTeacher .jrPage,
+#containerTabSchool .jrPage{
+    width: initial !important
+}
+.theReport #new_student_standard_progress_DIV .jrPage,
+.theReport #new_student_test_progress_DIV .jrPage,
+.theReport #new_class_standard_proficiency_DIV .jrPage,
+.theReport #new_school_standard_proficiency_DIV .jrPage,
+.theReport #teacher_New_School_Test_Performance_WidgetDIV .jrPage{
+    width:initial !important
+}
+.widget-header .fa{
+    cursor:pointer;
+    float:right;
+    margin-left:6px;
+    color:#00ccff;
+    height:45px;
+    line-height:45px;
+    opacity:.6
+}
+.widget-header i.fa{
+    float:none
+}
+.widget-header .fa:hover {
+    opacity:1
+}
+.widget-header .removeWidget{
+    position:absolute;
+    right:15px;
+    top:0;
+
+}
+.widget-header .widget-title{
+    cursor:text;
+}
+.widget-header h3{
+    height:45px;
+    line-height:45px;
+    padding:0 12px;
+    font-size:15px;
+    font-weight:bold;
+    position:relative;
+}
+.widget-header .label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.widget-header .widget-title {
+    display:block;
+    text-overflow:ellipsis;
+    height:43px;
+    line-height:43px;
+    width:100%;
+    overflow:hidden;
+    white-space:nowrap;
+    padding-right:24px;
+}
+.widget-header form.widget-title {
+    display: inline;
+}
+
+.widget-header form.widget-title input.form-control {
+    width: auto;
+    min-width:initial;
+    display: inline-block;
+    height:36px;
+}
+
+
+
+/*.widget .widget-ew-resizer {
+    position: absolute;
+    right: 0px;
+    bottom: 0;
+    cursor: nw-resize;
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 0px solid transparent;
+    border-right: 12px solid #00ccff;
+}
+.ui-resizable-e,
+.ui-resizable-s{
+    display:none
+}
+.ui-resizable-handle{
+    position: absolute;
+    right: 11px;
+    bottom:1px;
+    cursor: nw-resize;
+    width: 0;
+    height: 0;
+    border-top: 12px solid transparent;
+    border-bottom: 0px solid transparent;
+    border-right: 12px solid #00ccff;
+}
+.widget-s-resizer{
+    cursor:s-resize;
+    height:3px;
+    background:#ccc;
+}
+
+.widget .widget-resizer-marquee {
+    background:rgba(0,0,0,0.1) ;
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width:100vw;
+    min-width:332px;
+    z-index: 2;
+}*/
+
+.remove-layout-icon {
+    vertical-align: text-top;
+    cursor: pointer;
+    opacity: 0.3;
+}
+.remove-layout-icon:hover {
+    opacity: 1;
+}
+.layout-title {
+    display: inline-block;
+}
+.highcharts-background{
+    fill:transparent
+}
+.textbox.combo{
+    position:relative;
+    width:100% !important
+}
+.textbox.combo,
+select{
+  -moz-box-sizing: content-box;
+  -ms-touch-action: none;
+  font-family: Verdana,Arial,sans-serif;
+  font-style: normal;
+  font-size: 11px;
+  border-color: #aaa;
+  background: #efefef;
+  border-radius:5px;
+  height:20px !important;
+  padding:0 18px 0 6px;
+}
+option{
+    font-size:13px;
+    line-height:30px;
+    padding:6px 0
+}
+.combo-panel{
+    background:none #fff !important;
+    max-height:360px !important;
+    height:auto !important;
+    overflow:auto;
+    padding:0;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+.combo-arrow{
+    height:20px !important;
+    background:url(../img/arrDown.png) no-repeat center;
+}
+.textbox-text{
+    background: #efefef;
+    border:0 none;
+    padding:0 !important;
+    margin:0 !important;
+    border-radius:10px;
+    width:100% !important;
+    font-size:11px;
+}
+.textbox-addon-right{
+    position:absolute;
+    background:#f2f2f2;
+}
+.panel.combo-p{
+    /*border:#99cc66 1px solid*/
+}
+.panel.combo-p,
+.combo-panel{
+    width:auto !important;
+    min-width:344px;
+    padding:0 !important;
+}
+
+.combobox-item{
+    padding:0px 12px;
+    height:26px;
+    line-height:26px;
+    white-space:nowrap;
+}
+.combobox-item-selected:hover,
+.combobox-item-hover{
+    background:#eee
+}
+.combobox-item-selected{
+    background:#E9F7C8
+}
+
+.chartFilters{
+    margin-bottom:12px;
+    padding:0 0 0 15px;
+}
+.chartFilters>div[class*="col-"]{
+    padding:0 15px 0 0;
+}
+.chartFilters > div[class*="col-"]:first-child {
+}
+.chartFilters input {
+    
+}
+.exportForm{
+    position:absolute;
+    width:100%;
+    bottom:15px;
+}
+.theReport .exportForm{
+    position:static
+}
+.exportForm .col-md-6{
+    width:100% !important
+}
+    .exportForm label {
+        width:96px;
+        float:left;
+        text-align:right;
+        margin-right:6px;
+    }
+
+.chartFilters label{
+    width:100%;
+    clear:both;
+    margin:5px 0 2px 0;
+    font-weight:400;
+    font-size:12px;
+}
+.chartUpperBtns{
+    margin-bottom:12px;
+}
+.chartUpperBtns .viewRepBtn{
+    margin-right:12px;
+    width:108px;
+    white-space:nowrap;
+    text-overflow:ellipsis
+}
+.exportRepBtn{
+    width:108px
+}
+.exportForm select {
+    float:left;
+    width:84px;
+    margin-right:6px;
+}
+
+/*.newExportForm{margin-bottom:12px;}*/
+.newExportForm #buttonVR{
+    margin-right:12px;
+}
+.newExportForm label{
+    padding:0;
+    margin:0 6px 0 0;
+}
+.newExportForm #button22{
+    float:right;
+}
+.newExportForm select {
+    width:108px;
+    padding:0;
+    margin-right: 6px;
+}
+/*.newExportForm label{
+    margin-right:15px;
+}
+.newExportForm select{
+    margin-right:15px;
+}*/
+.newChartFilters select{
+    clear:both;
+    box-sizing:border-box
+
+}
+.chartFilters select{
+    width:100%;
+    clear:both;
+    box-sizing:border-box
+
+}
+.spinner{
+    position:relative !important
+}
+#spinnerMasteryteacher_coach_teacher_standard_performance_school,
+#spinnerMasteryteacher_administrator_student_standard_performance,
+#spinnerMasteryteacher_at_risk_student_test9,
+#spinnerMasteryteacher_at_risk_student_test8,
+#spinnerMasteryteacher_at_risk_student_test,
+#spinnerMasteryteacher_at_risk_student_test7,
+#spinnerMasteryteacher_at_risk_student_test6,
+#spinnerMasteryteacher_at_risk_student_test5,
+#spinnerMasteryteacher_at_risk_student_test4,
+#spinnerMasteryteacher_at_risk_student_test3,
+#spinnerMasteryteacher_at_risk_student_test2,
+#spinnerNewStudentStandardProgress,
+#spinnerNewStudentTestProgress,
+#spinnerMasteryStandardPerformanceBySubjectAreaReportPie,
+#spinnerMasteryStandardPerformanceBySubjectAreaReport,
+#spinnerMasteryAdminSchoolPerformanceByTest,
+#spinnerMasteryAdminSchoolReportChart,
+#spinnerTop20Person,
+#spinnerStateZodiac,
+#spinnerMasteryChart,
+#spinnerColorDistributionReport,
+#spinnerClassPerformanceReport,
+#spinnerClassPerformanceReport,
+#spinnerTeacherDashboard,
+#spinnerNewTeacherDashboard,
+#spinnerNewDistrictStandardProficiency,
+#spinnerNewSchoolStandardProficiency,
+#spinnerNewClassStandardProficiency,
+
+#spinnerSchoolAverage,
+#spinnerTeacherAverageWidget,
+#spinnerNewNewStudentRemediation,
+#spinnerClassAverage,
+#spinnerStudentRemediationReportD,
+#spinnerTeacherItemAnalysisReport,
+#spinnerNewItemAnalysisReport,
+#spinnerNewDistrictStandardMasteryReport,
+#spinnerStudentPerformanceGO,
+#spinnerTeacherDistrictAverageWidget,
+#spinnerNewSchoolTestPerformance,
+#spinnerNewStudentTestPerformance,
+#spinnerNewTeacherDashboard,
+#spinnerNewStudentRosterReport,
+#spinnerStudentProfile,
+#spinnerTabStudentProfile
+{
+        width:100px;
+        height:100px;
+        background:rgba(196, 226, 126, .6);
+        background:rgba(0, 204, 255, .6);
+        position:absolute;
+        transform: translate(-50%, -50%);
+        left:50%;
+        top:50%;
+        z-index:997;
+        border-radius:3px;
+}
+.modal-open div[id*="spinner"]{
+    z-index:1060 !important
+}
+#new_teacher_Dashboard_DIV>div,
+#teacher_Dashboard_DIV>div{
+    min-width:1500px;
+    overflow:initial !important
+}
+
+@media only screen and (max-width : 1024px) {
+    .widget-container{
+        height:540px !important;
+    }
+    .widget-content>div>div:nth-child(3){
+        height:330px;
+    }
+    .widget.panel{
+        margin-bottom:0;
+    }
+    .widget-content{
+        height:493px !important
+    }
+    
+    #District_Administrator_School_Comparison_Report_Chart_DIV,
+    #teacher_Student_Performance_Go_WidgetDIV, #teacher_School_Average_WidgetDIV {
+        height:330px;
+    }
+    #teacher_Student_Remediation_Report_DashDIV,
+    #teacher_Student_Performance_Go_WidgetDIV,
+    #teacher_School_Average_WidgetDIV,
+    #teacher_Class_Average_WidgetDIV,
+    #teacher_Average_WidgetDIV,
+    #teacher_District_Average_WidgetDIV {
+        height:280px;
+    }
+    ul.dropdown-menu{
+        max-height:420px;
+        overflow:auto
+    }
+}
+
+.show_chartTypeSelector_wrapper{
+    display:none
+}

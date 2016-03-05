@@ -1,0 +1,367 @@
+﻿
+<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="administrator_student_standard_performance_school">School Name</label>
+            <input id="administrator_student_standard_performance_school" type="multiselect" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="administrator_student_standard_performance_test_name">Test Name</label>
+            <input id="administrator_student_standard_performance_test_name" type="multiselect" />
+
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport20()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button20">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerMasteryteacher_administrator_student_standard_performance"></div>
+<div id="administrator_student_standard_performance_DIV" class="reportContainer"></div>
+ 
+<script type='text/javascript'>
+    changeScroll();
+    var report20;
+    var viewReport20;
+    $(document).ready(function () {
+        sessionService();
+        //logReportMessage("Ran Student Standard Performance Report");
+        console.log("doc ready");
+        var reportUri20 = "/Polk/Reports/Administrator___Student_Standard_Performance_Report";
+        var inputControls20;
+        var vv20, SchoolInputControl, TestInputControl;
+        var report20FirstDisplay = true;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerMasteryteacher_administrator_student_standard_performance");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        viewReport20 = function () {
+            sessionService();
+            if ($("#administrator_student_standard_performance_school").combobox('getText') != "---" && $("#administrator_student_standard_performance_school").combobox('getText').length > 0 &&
+                $("#administrator_student_standard_performance_test_name").combobox('getText') != "---" && $("#administrator_student_standard_performance_test_name").combobox('getText').length > 0)
+            {
+                $("#spinnerMasteryteacher_administrator_student_standard_performance").show();
+                report20 = vv20.report({
+                    resource: "/Polk/Reports/Administrator___Student_Standard_Performance_Report",
+                    container: "#administrator_student_standard_performance_DIV",
+                    params: getSelection20(),
+                    success: function () {
+                        $("#spinnerClassPerformanceReport").hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running Student Standard Performance Report");
+                        console.log(error);
+                    },
+                    events: {
+                        beforeRender: function (el) {
+                            //  console.log(widgetHeightDefault);
+                            //$("#administrator_student_standard_performance_DIV").find("._jr_report_container_").css({
+
+                            //   // "max-height": widgetHeightDefault + "px",
+                            //    "overflow": "auto"
+                            //});
+                            $("#spinnerMasteryteacher_administrator_student_standard_performance").hide();
+                        }
+                    }
+
+                });
+
+                var administrator_student_standard_performance_param =
+                        {
+                            'administrator_student_standard_performance_param': [{
+                                'param1': $("#administrator_student_standard_performance_school").combobox('getValue'),
+                                'param2': $("#administrator_student_standard_performance_test_name").combobox('getValue')
+                            }]
+
+                        };
+
+                logReportMessage("Ran Report Student Standard Performance with following parameters: School Name- " + $("#administrator_student_standard_performance_school").combobox('getText') +
+                                    " Test Name" + $("#administrator_student_standard_performance_test_name").combobox('getText'));
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].administrator_student_standard_performance_param) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'administrator_student_standard_performance_param': [{
+                                'param1': '',
+                                'param2': ''
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(administrator_student_standard_performance_param);
+
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else {
+                alert("Please select all parameter in order to view Student Standard Performance Report");
+            }
+        };
+
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+            vv20 = v;
+            inputControls20 = v.inputControls({
+                resource: reportUri20,
+                success: renderInputControls20,
+                    error: function (error) {
+                        logReportMessage("Error Loading Input Controls For Student Standard Performance Report");
+                        console.log(error);
+                    }
+            });
+            //$('#administrator_student_standard_performance_school').on("change", updateCascade20);
+            //$('#administrator_student_standard_performance_test_name').on("change", updateCascade20);
+
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select20 = buildControl("Export to: ", reportExports, 'select20'),
+            $button20 = $("#button20"),
+
+            $button20.click(function () {
+                sessionService();
+                console.log($select20.val());
+                report20.export({
+                    //export options here
+                    outputFormat: $select20.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button20"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection20() {
+            return {
+                "schoolName_1": $("#administrator_student_standard_performance_school").combobox('getValues'),
+                "testName_1": $("#administrator_student_standard_performance_test_name").combobox('getValues')
+
+            }
+        }
+        function updateCascade20() {
+            $("#spinnerMasteryteacher_administrator_student_standard_performance").show();
+
+            inputControls20
+                    .params(getSelection20())
+                    .run()
+                    .then(renderInputControls20)
+                    .then(function () {
+
+                        $('#spinnerMasteryteacher_administrator_student_standard_performance').hide();
+                    });
+        }
+        function showSpinner() {
+            $('#spinnerMasteryteacher_administrator_student_standard_performance').show();
+        }
+        function renderInputControls20(data) {
+
+          
+            $("#administrator_student_standard_performance_school").empty();
+            $("#administrator_student_standard_performance_test_name").empty();
+
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+            if (report20FirstDisplay) {
+
+                getDataFromServer();
+            }
+
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'administrator_student_standard_performance_param': [{
+                            'param1': '',
+                            'param2': ''
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                if (!report20FirstDisplay) {
+                    
+                    break;
+                }
+                if (oldLocalStorage[i].administrator_student_standard_performance_param) {
+                    if (oldLocalStorage[i].administrator_student_standard_performance_param[0].param1 == null ||
+                        oldLocalStorage[i].administrator_student_standard_performance_param[0].param2 == null)
+                    {
+                        break;
+                    }
+
+                    isInLocalStorage = true;
+                    //$("#administrator_student_standard_performance_school").val(oldLocalStorage[i].administrator_student_standard_performance_param[0].param1);
+                    //$("#administrator_student_standard_performance_test_name").val(oldLocalStorage[i].administrator_student_standard_performance_param[0].param2);
+
+
+
+                    SchoolInputControl = _.findWhere(data, { id: "schoolName_1" });
+                    
+                    _.each(SchoolInputControl.state.options, function (option) {
+
+                        if (option.label == oldLocalStorage[i].administrator_student_standard_performance_param[0].param1) {
+                            option.selected = true;
+
+                        }
+                        else {
+                            option.selected = false;
+
+                        }
+                    });
+                    $("#administrator_student_standard_performance_school").combobox({
+                        data: SchoolInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade20
+                    });
+                    inputControls20.params({
+                        "schoolName_1": [oldLocalStorage[i].administrator_student_standard_performance_param[0].param1]
+                        
+                    }).run(function (inputcontrolArray) {
+
+
+                        TestInputControl = _.findWhere(inputcontrolArray, { id: "testName_1" });
+                    var select = $("#administrator_student_standard_performance_test_name");
+                    _.each(TestInputControl.state.options, function (option) {
+
+                        if (option.label == oldLocalStorage[i].administrator_student_standard_performance_param[0].param2) {
+                            option.selected = true;
+
+                        }
+                        else {
+                            option.selected = false;
+                        }
+                    });
+
+                    $("#administrator_student_standard_performance_test_name").combobox({
+                        data: TestInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade20
+                    });
+                    
+                    viewReport20();
+
+                    });
+                    report20FirstDisplay = false;
+                    break;
+
+                }
+
+            }
+
+            if (!isInLocalStorage) {
+
+                console.log("not localstorage");
+
+
+                SchoolInputControl = _.findWhere(data, { id: "schoolName_1" });
+                
+                $("#administrator_student_standard_performance_school").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade20
+                });
+
+                TestInputControl = _.findWhere(data, { id: "testName_1" });
+                var select = $("#administrator_student_standard_performance_test_name");
+
+                $("#administrator_student_standard_performance_test_name").combobox({
+                    data: TestInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade20
+                });
+
+            }
+
+            report20FirstDisplay = false;
+         
+            $("#spinnerMasteryteacher_administrator_student_standard_performance").hide();
+          
+        }
+         
+    });
+
+</script>
+

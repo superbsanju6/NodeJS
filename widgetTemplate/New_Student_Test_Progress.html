@@ -1,0 +1,637 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="student_test_progress_district">Choose a District</label>
+            <input id="student_test_progress_district">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="student_test_progress_school">Choose a School</label>
+            <input id="student_test_progress_school">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="student_test_progress_teacher">Choose a Teacher</label>
+            <input id="student_test_progress_teacher">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="student_test_progress_classes">Choose Classes</label>
+            <input id="student_test_progress_classes">
+        </div>
+    </div>
+    
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="student_test_progress_test_type">Choose a Test Type</label>
+            <input id="student_test_progress_test_type">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="student_test_progress_tests">Choose Tests</label>
+            <input id="student_test_progress_tests">
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport40()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button40">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="spinnerNewStudentTestProgress"></div>
+<div id="new_student_test_progress_DIV" class="reportContainer"></div>
+<button id="btnForNewStudentStandardProgressModal" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#infoNewStudentStandardProgressReportAtClick" style="display:none;">Modal</button>
+
+<!-- Modal -->
+<div class="modal fade modal-drill" id="infoNewStudentStandardProgressReportAtClick" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modalTitle">Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 style="color:transparent;" class="modal-title" id="myModalLabel">Drilled Report</h5>
+            </div>
+            <div class="modal-body" id="modalBodyNewStudentStandardProgress">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<!--<div id="drilldownreport" style="position:absolute;top:25%;left:25%;"></div>-->
+<!--<div class="row exportForm">
+    <div class="col-md-6">
+        <div class="form-group-sm">
+            <button id="button40">Export</button>
+        </div>
+    </div>
+</div>-->
+
+<script type='text/javascript'>
+    changeScroll();
+    //changeScrollModal();
+
+    var viewReport40;
+    var report40;
+    $(document).ready(function () {
+        sessionService();
+        $('.modal-drill').on('shown.bs.modal', function () {
+            window.dispatchEvent(new Event('resize'));
+        });
+        //logReportMessage("Ran Student Test Progress Report");
+        var reportUri40 = "/Polk_County_Reporting/Reports/Teacher/Student_Test_Progress";
+        var inputUri40 = "/Polk_County_Reporting/Reports/Teacher/Student_Test_Progress";
+        var inputControls40;
+        var vv40;
+        var report40FirstDisplay = true;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerNewStudentTestProgress");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        viewReport40 = function () {
+            sessionService();
+            if ($("#student_test_progress_district").combobox('getText') != "---" && $("#student_test_progress_district").combobox('getText').length > 0 &&
+              $("#student_test_progress_school").combobox('getText') != "---" && $("#student_test_progress_school").combobox('getText').length > 0 &&
+              $("#student_test_progress_teacher").combobox('getText') != "---" && $("#student_test_progress_teacher").combobox('getText').length > 0 &&
+               $("#student_test_progress_classes").combobox('getText') != "---" && $("#student_test_progress_classes").combobox('getText').length > 0 &&
+               $("#student_test_progress_test_type").combobox('getText') != "---" && $("#student_test_progress_test_type").combobox('getText').length > 0 &&
+               $("#student_test_progress_tests").combobox('getText') != "---" && $("#student_test_progress_tests").combobox('getText').length > 0) {
+
+                $("#spinnerNewStudentTestProgress").show();
+                report40 = vv40.report({
+                    resource: "/Polk_County_Reporting/Reports/Teacher/Student_Test_Progress",
+                    container: "#new_student_test_progress_DIV",
+                    params: getSelection40(),
+                    linkOptions: {
+                        beforeRender: function (linkToElemPairs) {
+                            linkToElemPairs.forEach(showCursor);
+                        },
+                        events: {
+                            "click": function (ev, link) {
+                                $("#spinnerNewStudentTestProgress").show();
+                                sessionService();
+                                if (link.type == "ReportExecution") {
+                                    window.localStorage['stdId'] = link.parameters.studentId;
+                                    window.localStorage['stdName'] = "Student Profile";
+                                    window.open('#/tabStudentProfile');
+                                    $("#spinnerNewStudentTestProgress").hide();
+                                    //vv40("#modalBodyNewStudentStandardProgress").report({
+                                    //    resource: link.parameters._report,
+                                    //    params: {
+                                    //        "districtId": [link.parameters.districtId],
+                                    //        "schoolId": [link.parameters.schoolId],
+                                    //        "teacherId": [link.parameters.teacherId],
+                                    //        "classId": [link.parameters.classId],
+                                    //        "testType": [link.parameters.testType],
+                                    //        "testId": [link.parameters.testId],
+                                    //        "studentId": [link.parameters.studentId]
+                                    //        //parStoreId: [link.parameters.parStoreId],
+                                    //    },
+                                    //    events: {
+                                    //        reportCompleted: function (status) {
+                                    //            $("#spinnerNewStudentTestProgress").hide();
+                                    //            $('.modalTitle').html("Student Profile");
+
+                                    //            $('#btnForNewStudentStandardProgressModal').click();
+                                    //            //document.getElementById("infoReportAtClick").showModal();
+                                    //        }
+                                    //    },
+                                    //    error: function (error) {
+                                    //        logReportMessage("Error Running Student Profile From Modal");
+                                    //        console.log(error);
+                                    //    }
+
+                                    //});
+                                }
+                                console.log(link);
+                            }
+                        }
+                    },
+                    success: function () {
+                        $("#spinnerNewStudentTestProgress").hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running Student Test Progress Report");
+                        console.log(error);
+                    }
+                    //,
+                    //events: {
+                    //    beforeRender: function (el) {
+                    //        console.log(widgetHeightDefault);
+                    //        $("#new_student_test_progress_DIV").find("._jr_report_container_").css({
+                    //            "max-height": widgetHeightDefault + "px",
+                    //            "overflow": "auto"
+                    //        });
+                    //        $("#spinnerNewStudentTestProgress").hide();
+                    //    }
+                    //}
+                });
+
+
+                var new_student_test_progress_report_param =
+                  {
+                      'new_student_test_progress_report_param': [{
+
+                          'param1': $("#student_test_progress_district").combobox('getValue'),
+                          'param2': $("#student_test_progress_school").combobox('getValue'),
+                          'param3': $("#student_test_progress_teacher").combobox('getValue'),
+                          'param4': $("#student_test_progress_classes").combobox('getValues'),
+                          'param5': $("#student_test_progress_test_type").combobox('getValue'),
+                          'param6': $("#student_test_progress_tests").combobox('getValues')
+                      }]
+
+                  };
+                //logReportMessage("Runned Student Test Progress Report");
+                logReportMessage("Ran Student Test Progress Report with following parameters: District- " + $("#student_test_progress_district").combobox('getText') +
+                  " School- " + $("#student_test_progress_school").combobox('getText') +
+                  " Teacher- " + $("#student_test_progress_teacher").combobox('getText') +
+                  " Classes- " + $("#student_test_progress_classes").combobox('getText') +
+                  " Test Type- " + $("#student_test_progress_test_type").combobox('getText') +
+                  " Tests- " + $("#student_test_progress_tests").combobox('getText'));
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].new_student_test_progress_report_param) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'new_student_test_progress_report_param': [{
+                                'param1': '',
+                                'param2': '',
+                                'param3': '',
+                                'param4': '',
+                                'param5': '',
+                                'param6': ''
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(new_student_test_progress_report_param);
+
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else {
+                alert("Please select all parameter in order to view Student Test Progress");
+            }
+        };
+
+        function showCursor(pair) {
+
+            var el = pair.element;
+
+            el.style.cursor = "pointer";
+
+        }
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+            vv40 = v;
+            inputControls40 = v.inputControls({
+                resource: inputUri40,
+                success: renderInputControls40,
+                error: function (error) {
+                    logReportMessage("Error Loading Input Controls For Student Test Progress Report");
+                    console.log(error);
+                }
+            });
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select40 = buildControl("Export to: ", reportExports, 'select40');
+            $button40 = $("#button40");
+
+            $button40.click(function () {
+                sessionService();
+                console.log($select40.val());
+                report40.export({
+                    //export options here
+                    outputFormat: $select40.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertAfter($("#button40"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection40() {
+
+            return {
+                "districtId": $("#student_test_progress_district").combobox('getValues'),
+                "schoolId": $("#student_test_progress_school").combobox('getValues'),
+                "teacherId": $("#student_test_progress_teacher").combobox('getValues'),
+                "classIds": $("#student_test_progress_classes").combobox('getValues'),
+                "testType": $("#student_test_progress_test_type").combobox('getValues'),
+                "testIds": $("#student_test_progress_tests").combobox('getValues')
+
+            }
+        }
+        function updateCascade40() {
+            $("#spinnerNewStudentTestProgress").show();
+
+            inputControls40
+                    .params(getSelection40())
+                    .run()
+                    .then(renderInputControls40)
+                    .then(function () {
+
+                        $('#spinnerNewStudentTestProgress').hide();
+                    });
+        }
+        function showSpinner() {
+            $('#spinnerNewStudentTestProgress').show();
+        }
+        function renderInputControls40(data) {
+            console.log(data);
+            
+            $("#student_test_progress_district").empty();
+            $("#student_test_progress_school").empty();
+            $("#student_test_progress_teacher").empty();
+            $("#student_test_progress_classes").empty();
+            $("#student_test_progress_test_type").empty();
+            $("#student_test_progress_tests").empty();
+
+
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+            if (report40FirstDisplay) {
+
+                getDataFromServer();
+            }
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'new_student_test_progress_report_param': [{
+                            'param1': '',
+                            'param2': '',
+                            'param3': '',
+                            'param4': '',
+                            'param5': '',
+                            'param6': ''
+
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+
+
+
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                if (!report40FirstDisplay) {
+
+                    break;
+                }
+
+
+
+                if (oldLocalStorage[i].new_student_test_progress_report_param) {
+                    if (oldLocalStorage[i].new_student_test_progress_report_param[0].param1 == null ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param2 == null ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param3 == null ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param4 == null ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param5 == null ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param6 == null ||
+
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param1 == '' ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param2 == '' ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param3 == '' ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param4 == '' ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param5 == '' ||
+                   oldLocalStorage[i].new_student_test_progress_report_param[0].param6 == '' 
+                        ) {
+
+                        break;
+                    }
+
+                    isInLocalStorage = true;
+
+
+                    var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                    var select = $("#student_test_progress_district");
+                    _.each(DistrictInputControl.state.options, function (option) {
+                        if (option.value == oldLocalStorage[i].new_student_test_progress_report_param[0].param1) {
+                            option.selected = true;
+                        }
+                        else {
+                            option.selected = false;
+                        }
+                    });
+                    $("#student_test_progress_district").combobox({
+                        data: DistrictInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade40
+                    });
+
+
+                    // function
+                    inputControls40.params({
+                        "districtId": [oldLocalStorage[i].new_student_test_progress_report_param[0].param1],
+                        "schoolId": [oldLocalStorage[i].new_student_test_progress_report_param[0].param2],
+                        "teacherId": [oldLocalStorage[i].new_student_test_progress_report_param[0].param3],
+                        "classIds": oldLocalStorage[i].new_student_test_progress_report_param[0].param4,
+                        "testType": [oldLocalStorage[i].new_student_test_progress_report_param[0].param5],
+                        "testIds": oldLocalStorage[i].new_student_test_progress_report_param[0].param6
+                    }).run(function (inputcontrolArray) {
+                        // debugger;
+
+
+                        var SchoolInputControl = _.findWhere(inputcontrolArray, { id: "schoolId" });
+                        var select = $("#student_test_progress_school");
+                        _.each(SchoolInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].new_student_test_progress_report_param[0].param2) {
+                                option.selected = true;
+                            }
+                            else {
+                                option.selected = false;
+                            }
+                        });
+                        $("#student_test_progress_school").combobox({
+                            data: SchoolInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade40
+                        });
+
+                        var TeacherInputControl = _.findWhere(inputcontrolArray, { id: "teacherId" });
+                        var select = $("#student_test_progress_teacher");
+                        _.each(TeacherInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].new_student_test_progress_report_param[0].param3) {
+                                option.selected = true;
+                            }
+                            else {
+                                option.selected = false;
+                            }
+                        });
+                        $("#student_test_progress_teacher").combobox({
+                            data: TeacherInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade40
+                        });
+
+                        var ClassesInputControl = _.findWhere(inputcontrolArray, { id: "classIds" });
+                        var select = $("#student_test_progress_classes");
+                        for (var k = 0; k < oldLocalStorage[i].new_student_test_progress_report_param[0].param4.length; k++) {
+                            _.each(ClassesInputControl.state.options, function (option) {
+                                if (!option.selected) {
+                                    if (option.value == oldLocalStorage[i].new_student_test_progress_report_param[0].param4[k]) {
+                                        option.selected = true;
+
+                                    }
+                                    else {
+                                        option.selected = false;
+                                    }
+                                }
+
+                            });
+                        };
+                        $("#student_test_progress_classes").combobox({
+                            data: ClassesInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: true,
+                            onSelect: updateCascade40
+                        });
+
+
+                        var TestTypeInputControl = _.findWhere(inputcontrolArray, { id: "testType" });
+                        var select = $("#student_test_progress_test_type");
+                        _.each(TestTypeInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].new_student_test_progress_report_param[0].param5) {
+                                option.selected = true;
+
+                            }
+                            else {
+                                option.selected = false;
+
+                            }
+
+
+                        });
+                        $("#student_test_progress_test_type").combobox({
+                            data: TestTypeInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade40
+                        });
+
+                        var TestsInputControl = _.findWhere(inputcontrolArray, { id: "testIds" });
+                        var select = $("#student_test_progress_tests");
+                        for (var k = 0; k < oldLocalStorage[i].new_student_test_progress_report_param[0].param6.length; k++) {
+                            _.each(TestsInputControl.state.options, function (option) {
+                                if (!option.selected) {
+                                    if (option.value == oldLocalStorage[i].new_student_test_progress_report_param[0].param6[k]) {
+                                        option.selected = true;
+
+                                    }
+                                    else {
+                                        option.selected = false;
+                                    }
+                                }
+
+                            });
+                        };
+                        $("#student_test_progress_tests").combobox({
+                            data: TestsInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: true,
+                            onSelect: updateCascade40
+                        });
+
+                        viewReport40();
+                    });
+                    report40FirstDisplay = false;
+
+                    break;
+
+                }
+
+            }
+            if (!isInLocalStorage) {
+
+
+                console.log(data);
+                var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                var select = $("#student_test_progress_district");
+                $("#student_test_progress_district").combobox({
+                    data: DistrictInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade40
+                });
+
+                var SchoolInputControl = _.findWhere(data, { id: "schoolId" });
+                var select = $("#student_test_progress_school");
+                $("#student_test_progress_school").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade40
+                });
+
+                var TeacherInputControl = _.findWhere(data, { id: "teacherId" });
+                var select = $("#student_test_progress_teacher");
+                $("#student_test_progress_teacher").combobox({
+                    data: TeacherInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade40
+                });
+
+                var ClassesInputControl = _.findWhere(data, { id: "classIds" });
+                var select = $("#student_test_progress_classes");
+                $("#student_test_progress_classes").combobox({
+                    data: ClassesInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: true,
+                    onSelect: updateCascade40
+                });
+
+              
+                var TestTypeInputControl = _.findWhere(data, { id: "testType" });
+                var select = $("#student_test_progress_test_type");
+                $("#student_test_progress_test_type").combobox({
+                    data: TestTypeInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade40
+                });
+
+                var TestsInputControl = _.findWhere(data, { id: "testIds" });
+                var select = $("#student_test_progress_tests");
+
+                $("#student_test_progress_tests").combobox({
+                    data: TestsInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: true,
+                    onSelect: updateCascade40
+                });
+            }
+            report40FirstDisplay = false;
+            $("#spinnerNewStudentTestProgress").hide();
+        }
+    });
+</script>

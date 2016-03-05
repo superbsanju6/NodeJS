@@ -1,0 +1,293 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="coach_teacher_standard_performance_school">School Name</label>
+            <input id="coach_teacher_standard_performance_school" type="multiselect" />
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport21()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button21">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerMasteryteacher_coach_teacher_standard_performance_school"></div>
+<div id="coach_teacher_standard_performance_school_DIV" class="reportContainer"></div>
+
+<script type='text/javascript'>
+    changeScroll();
+    var report21;
+    var viewReport21;
+    $(document).ready(function () {
+        sessionService();
+        //logReportMessage("Ran Coach Teacher Standard Performance Report");
+        var reportUri21 = "/Polk/Reports/Teacher_Standard_Performance_Report";
+        var report21, inputControls21;
+        var vv21;
+        var report21FirstDisplay = true;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerMasteryteacher_coach_teacher_standard_performance_school");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        viewReport21 = function () {
+            sessionService();
+            if ($("#coach_teacher_standard_performance_school").combobox('getText') != "---" && $("#coach_teacher_standard_performance_school").combobox('getText').length > 0)
+            {
+
+                $("#spinnerMasteryteacher_coach_teacher_standard_performance_school").show();
+                report21 = vv21.report({
+                    resource: "/Polk/Reports/Teacher_Standard_Performance_Report",
+                    container: "#coach_teacher_standard_performance_school_DIV",
+                    params: getSelection21(),
+                    success: function () {
+                        $("#spinnerMasteryteacher_coach_teacher_standard_performance_school").hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running Coach Teacher Standard Performance Report");
+                        console.log(error);
+                    }
+
+
+                });
+
+                var coach_teacher_standard_performance_report_param =
+                       {
+                           'coach_teacher_standard_performance_report_param': [{
+                               'param1': $("#coach_teacher_standard_performance_school").combobox('getValue')
+
+                           }]
+
+                       };
+                logReportMessage("Ran Coach Teacher Standard Performance Report with following parameters: School Name-" + $("#coach_teacher_standard_performance_school").combobox('getText'));
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].coach_teacher_standard_performance_report_param) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'coach_teacher_standard_performance_report_param': [{
+                                'param1': ''
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(coach_teacher_standard_performance_report_param);
+
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else {
+                alert("Please select all parameter in order to view Teacher Standard Performance Report");
+            }
+        };
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+            vv21 = v;
+            inputControls21 = v.inputControls({
+                resource: reportUri21,
+                success: renderInputControls21,
+                error: function (error) {
+                    logReportMessage("Error Loading Input Controls For Coach Teacher Standard Performance Report");
+                    console.log(error);
+                }
+            });
+            //$('#coach_teacher_standard_performance_school').on("change", updateCascade21);
+
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select21 = buildControl("Export to: ", reportExports, 'select21'),
+            $button21 = $("#button21"),
+
+            $button21.click(function () {
+                sessionService();
+                console.log($select21.val());
+                report21.export({
+                    //export options here
+                    outputFormat: $select21.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button21"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection21() {
+
+            return {
+                "schoolName_1": $("#coach_teacher_standard_performance_school").combobox('getValues')
+
+
+            }
+        }
+        function updateCascade21() {
+            $("#spinnerMasteryteacher_coach_teacher_standard_performance_school").show();
+
+            inputControls21
+                    .params(getSelection21())
+                    .run()
+                    .then(renderInputControls21)
+                    .then(function () {
+
+                        $('#spinnerMasteryteacher_coach_teacher_standard_performance_school').hide();
+                    });
+        }
+        function showSpinner21() {
+            $('#spinnerMasteryteacher_coach_teacher_standard_performance_school').show();
+        }
+        function renderInputControls21(data) {
+            $("#coach_teacher_standard_performance_school").empty();
+
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+            if (report21FirstDisplay) {
+
+                getDataFromServer();
+            }
+
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'coach_teacher_standard_performance_report_param': [{
+                            'param1': '' 
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                if (!report21FirstDisplay) {
+
+                    break;
+                }
+                if (oldLocalStorage[i].coach_teacher_standard_performance_report_param) {
+
+                    if (oldLocalStorage[i].coach_teacher_standard_performance_report_param[0].param1 == null)
+                    {
+
+                        break;
+                    }
+
+                    isInLocalStorage = true;
+                    //$("#administrator_student_standard_performance_school").val(oldLocalStorage[i].coach_teacher_standard_performance_report_param[0].param1);
+ 
+
+
+
+                    var TestInputControl = _.findWhere(data, { id: "schoolName_1" });
+                  
+                    _.each(TestInputControl.state.options, function (option) {
+
+                        if (option.label == oldLocalStorage[i].coach_teacher_standard_performance_report_param[0].param1) {
+                            option.selected = true;
+
+                        }
+                        else {
+                            option.selected = false;
+
+                        }
+                    }); 
+                    $("#coach_teacher_standard_performance_school").combobox({
+                        data: TestInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade21
+                    });
+                    report21FirstDisplay= false;
+                    viewReport21();
+                    break;
+
+                }
+
+            }
+
+
+
+            if (!isInLocalStorage) {
+
+                console.log(data);
+                var TestInputControl = _.findWhere(data, { id: "schoolName_1" });
+               
+                $("#coach_teacher_standard_performance_school").combobox({
+                    data: TestInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade21
+                });
+            }
+            report21FirstDisplay=false
+            $("#spinnerMasteryteacher_coach_teacher_standard_performance_school").hide();
+        }
+    });
+</script>

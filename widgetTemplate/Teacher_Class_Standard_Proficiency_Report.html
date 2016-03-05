@@ -1,0 +1,414 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_at_risk_student_teacher2">Select Teacher</label>
+            <input id="teacher_at_risk_student_teacher2" type="multiselect" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_at_risk_student_class2">Select Class</label>
+            <input id="teacher_at_risk_student_class2" type="multiselect" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_at_risk_student_test2">Select Test</label>
+            <input id="teacher_at_risk_student_test2" type="multiselect" />
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport1()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button1">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerMasteryteacher_at_risk_student_test2"></div>
+<div id="teacher_at_risk_student_test_DIV2" class="reportContainer"></div>
+
+<script type='text/javascript'>
+    changeScroll();
+    var report1;
+    var viewReport1;
+    $(document).ready(function () {
+        sessionService();
+        //logReportMessage("Ran Class Standard Proficiency Report");
+        var reportUri1 = "/Polk/Reports/Teacher___Class_Standard_Proficiency_Report";
+        var inputControls1;
+        var vv1;
+        var report1FirstDisplay = true;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerMasteryteacher_at_risk_student_test2");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        viewReport1 = function () {
+            sessionService();
+            if ($("#teacher_at_risk_student_teacher2").combobox('getText') != "---" && $("#teacher_at_risk_student_teacher2").combobox('getText').length > 0 &&
+             $("#teacher_at_risk_student_class2").combobox('getText') != "---" && $("#teacher_at_risk_student_class2").combobox('getText').length > 0 &&
+             $("#teacher_at_risk_student_test2").combobox('getText') != "---" && $("#teacher_at_risk_student_test2").combobox('getText').length > 0) {
+
+                console.log("view report1");
+                $("#spinnerMasteryteacher_at_risk_student_test2").show();
+                report1 = vv1.report({
+                    resource: "/Polk/Reports/Teacher___Class_Standard_Proficiency_Report",
+                    container: "#teacher_at_risk_student_test_DIV2",
+                    params: getSelection1(),
+                    success: function () {
+                        $("#spinnerMasteryteacher_at_risk_student_test2").hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running Class Standard Proficiency Report");
+                        console.log(error);
+                    },
+
+
+                    events: {
+                        beforeRender: function (el) {
+                            //console.log(widgetHeightDefault);
+                            //$("#teacher_at_risk_student_test_DIV2").find("._jr_report_container_").css({
+
+                            //    //"max-height": widgetHeightDefault + "px",
+                            //    "overflow": "auto"
+                            //});
+                            $("#spinnerMasteryteacher_at_risk_student_test2").hide();
+
+                        }
+
+                    }
+                });
+
+
+                var teacher_class_standard_proficiency_report_param =
+                    {
+                        'teacher_class_standard_proficiency_report_param': [{
+
+                            'param1': $("#teacher_at_risk_student_teacher2").combobox('getValue'),
+                            'param2': $("#teacher_at_risk_student_class2").combobox('getValue'),
+                            'param3': $("#teacher_at_risk_student_test2").combobox('getValue')
+                        }]
+
+                    };
+                logReportMessage("Ran Class Standard Proficiency Report with following parameters: Teacher- " + $("#teacher_at_risk_student_teacher2").combobox('getText') +
+                    " Class- " + $("#teacher_at_risk_student_class2").combobox('getText') +
+                    " Test- " + $("#teacher_at_risk_student_test2").combobox('getText'));
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].teacher_class_standard_proficiency_report_param) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'teacher_class_standard_proficiency_report_param': [{
+                                'param1': '',
+                                'param2': '',
+                                'param3': ''
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(teacher_class_standard_proficiency_report_param);
+
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else {
+                alert("Please select all parameter in order to view Class Standard Proficiency Report");
+            }
+        };
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+
+            vv1 = v;
+            inputControls1 = v.inputControls({
+                resource: reportUri1,
+                success: renderInputControls1,
+                error: function (error) {
+                    logReportMessage("Error Loading Input Controls For Class Standard Proficiency Report");
+                    console.log(error);
+                }
+            });
+           
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select1 = buildControl("Export to: ", reportExports, 'select1'),
+            $button1 = $("#button1"),
+
+
+            $button1.click(function () {
+                sessionService();
+                report1.export({
+                    //export options here
+                    outputFormat: $select1.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button1"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection1() {
+            
+            return {
+                "teacherKey": $("#teacher_at_risk_student_teacher2").combobox('getValues'),
+                "classKey": $("#teacher_at_risk_student_class2").combobox('getValues'),
+                "testName": $("#teacher_at_risk_student_test2").combobox('getValues')
+
+            }
+        }
+        function updateCascade1() {
+
+            console.log("updatecascade");
+            $("#spinnerMasteryteacher_at_risk_student_test2").show();
+            inputControls1
+                    .params(getSelection1())
+                    .run()
+                    .then(renderInputControls1)
+                    .then(function () {
+
+                        $('#spinnerMasteryteacher_at_risk_student_test2').hide();
+                    });
+
+        }
+        function showSpinner() {
+            $('#spinnerMasteryteacher_at_risk_student_test2').show();
+        }
+        function renderInputControls1(data) {
+            console.log("renderinputcontrols");
+            $("#teacher_at_risk_student_teacher2").empty();
+            $("#teacher_at_risk_student_class2").empty();
+            $("#teacher_at_risk_student_test2").empty();
+
+
+
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+            if (report1FirstDisplay) {
+
+                getDataFromServer();
+            }
+
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'teacher_class_standard_proficiency_report_param': [{
+                            'param1': '',
+                            'param2': '',
+                            'param3': ''
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+
+
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                if (!report1FirstDisplay) {
+
+                    break;
+                }
+                if (oldLocalStorage[i].teacher_class_standard_proficiency_report_param) {
+
+                    if (oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param1 == null ||
+                        oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param2 == null ||
+                        oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param3== null) { break;}
+
+
+
+                    isInLocalStorage = true;
+                
+
+                    var SchoolInputControl = _.findWhere(data, { id: "teacherKey" });
+                  
+                    _.each(SchoolInputControl.state.options, function (option) {
+                        if (option.value == oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param1) { 
+                            option.selected = true;
+                        }
+                        else {
+                            
+                            option.selected = false;
+                        }
+                    });
+                    $("#teacher_at_risk_student_teacher2").combobox({
+                        data: SchoolInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect:updateCascade1
+                    });
+
+ 
+                    inputControls1.params({
+                        "teacherKey": [oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param1],
+                        "classKey": [oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param2],
+                        "testName": [oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param3]
+                    }).run(function (inputcontrolArray) {
+                          
+
+                        var TestInputControl = _.findWhere(inputcontrolArray, { id: "classKey" });
+                        var select = $("#teacher_at_risk_student_class2");
+                        _.each(TestInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param2) {
+                                 
+                                option.selected = true;
+                            }
+                            else {
+                               
+                                option.selected = false;
+
+                            }
+                        });
+                        $("#teacher_at_risk_student_class2").combobox({
+                            data: TestInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade1
+                        });
+
+
+                        var TestInputControl2 = _.findWhere(inputcontrolArray, { id: "testName" });
+                        var select = $("#teacher_at_risk_student_test2");
+                        _.each(TestInputControl2.state.options, function (option) {
+                            if (option.label == oldLocalStorage[i].teacher_class_standard_proficiency_report_param[0].param3) {
+                               
+                                option.selected = true;
+                            }
+                            else {
+                                
+                                option.selected = false;
+                            }
+                         
+                            $("#teacher_at_risk_student_test2").combobox({
+                                data: TestInputControl2.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: false,
+                                onSelect: updateCascade1
+                            });
+
+                        });
+                        viewReport1();
+                    });
+
+               
+                    report1FirstDisplay = false;
+                  
+                    break;
+
+                }
+
+            }
+
+
+
+
+            if (!isInLocalStorage) {
+                console.log("!isinlocalstoarge");
+
+                console.log(data);
+                var TestInputControl = _.findWhere(data, { id: "classKey" });
+                var select = $("#teacher_at_risk_student_class2");
+                $("#teacher_at_risk_student_class2").combobox({
+                    data: TestInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade1
+                });
+
+
+
+                var TestInputControl2 = _.findWhere(data, { id: "testName" });
+                var select = $("#teacher_at_risk_student_test2");
+                $("#teacher_at_risk_student_test2").combobox({
+                    data: TestInputControl2.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade1
+                });
+
+                var SchoolInputControl = _.findWhere(data, { id: "teacherKey" });
+                var select = $("#teacher_at_risk_student_teacher2");
+                $("#teacher_at_risk_student_teacher2").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect:updateCascade1
+                });
+
+            }
+            $("#spinnerMasteryteacher_at_risk_student_test2").hide();
+            report1FirstDisplay = false;
+        }
+    });
+</script>

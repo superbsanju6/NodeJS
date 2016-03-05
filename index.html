@@ -1,0 +1,444 @@
+﻿<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Polk County Public Schools Executive Dashboard</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,600,700,800,300' rel='stylesheet' type='text/css'>
+    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="css/normalize.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap_large.css" rel="stylesheet" />
+    <!--<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
+    <link href="css/easyui.css" rel="stylesheet" />
+
+    <link href="css/angular-ui-dashboard.css" rel="stylesheet" />
+    <link href="css/dashStyle.css" rel="stylesheet" />
+    <link href="css/main.css" rel="stylesheet" />
+    <script src="http://code.jquery.com/jquery-2.1.0.js"></script>
+    <script src="js/spin.js"></script>
+    <script src="http://jaspersoft.education-insights.com/jasperserver-pro/client/visualize.js"></script>
+</head>
+
+   
+
+    
+<body ng-app="app">
+    <button id="btnForHelpModal" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#infoHelp" style="display:none;">Modal</button>
+    <!--<button id="btnStudent" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#infoStudent" style="display:none;">Modal</button>-->
+    <!-- Modal for Help -->
+    <div class="modal fade" id="infoHelp" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" style="width:90%; overflow:initial" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <img src="img/logo.png" style="height:36px;width:auto" />
+                    <button type="button" data-dismiss="modal" class="close" ng-controller="userController" ng-click="modalReloadX()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div style="overflow:initial;padding-right:0;" class="modal-body" id="modalBody">
+                    <iframe id="TV" src="http://tv.education-insights.com"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for infoStudent -->
+    <!--<div class="modal fade modal-drill" id="infoStudent" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modalTitle">Student Profile</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body" id="modalBodyforStudent">
+                    <div ng-if="studentId !=''">
+                        <div ng-include="'widgetTemplate/Student.html'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="container-fluid">
+        <div class="row page-header">
+            <div class="container">
+                <nav class="navbar navbar-default headerMain">
+                    <a class="navbar-brand"><img src="img/logo.png" /></a>
+                    <div class="collapse navbar-collapse" id="navTR">
+                        <ul class="nav navbar-nav navbar-right" ng-controller="userController" ng-show="showHeader">
+                            <li><a><strong>{{userLogedIn}}</strong></a></li>
+                            <li><a href="" ng-click="actionBtnForHelpModal()">Help</a></li>
+                            <li><a href="#" ng-controller="LogoutCtrl as LC" ng-click="Logout()">Logout</a></li>
+                        </ul>
+                        <button id="btnInfoStudent" ng-click="window.location.href='#tabStudentProfile'" formtarget="_blank" ng-class="getClass('/tabStudentProfile')" style="display:none;">Tab Student Profile</button>
+
+                        
+                        <div class="searchDiv" ng-controller="searchCtrl">
+                            <form role="search" ng-show="showHeader">
+                                <!--<div class="dropdown" ng-show="showHeader">
+                                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Category<span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Students</a></li>
+                                            <li><a href="#">Teachers</a></li>
+                                            <li><a href="#">Schools</a></li>
+                                            <li><a href="#">Standards</a></li>
+                                        </ul>
+                                    </div>-->
+                                <select class= "selectpicker" data-style="btn-default btn-xs" id="searchCategory" style="float:left;margin-right:12px;">
+                                    <option>Students</option>
+                                    <option>Teachers</option>
+                                    <option>Schools</option>
+                                    <!--<option>Standards</option>-->
+                                </select>
+                                <!--<span id="width_tmp" style="display: none;"></span>-->
+                                <input required type="text"
+                                       popover-trigger="focus"
+                                       placeholder="Search"
+                                       class="form-control"
+                                       style="width:300px; z-index: 9999 !important;float:right"
+                                       ng-model="simplequeryInput"
+                                       ng-model-onblur focus-on="focusMe"
+                                       ng-click="searchSimple=true" ng-keyup="$event.keyCode == 13 ? submitSimple() : null"
+                                       typeahead="item for item in autocomplete($viewValue) | limitTo:25"
+                                       typeahead-on-select="simplequeryInput=$model;openModal($model)" />
+                            </form>
+                        </div>
+                        <!--<form class="navbar-form navbar-right" role="search" style="position:relative" ng-show="showHeader">
+                            <input type="text" class="form-control inputSearch" placeholder="Search">
+                            <button type="submit" class="btn btn-default btn-sm search-button">Search</button>
+                        </form>-->
+                    </div>
+
+                </nav>
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <nav class="navbar navbar-default navbar-main">
+                        <ul class="nav navbar-nav" ng-show="showHeader">
+                            <li><a ng-class="getClass('/dashboard')" href="#dashboard">Dashboard<!--<span class="sr-only">(current)</span>--></a></li>
+                            <li><a ng-class="getClass('/reports')" href="#reports">Reports</a></li>
+                            <li><a ng-class="getClass('/admin')" href="#admin">Admin</a></li>
+
+
+                            <!--<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Assessments<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                            <li><a href="#">Asse3</a></li>
+                            </ul>
+                            </li>
+                            <li><a href="#">Admin</a></li>-->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--<div class="{{showReportSection ? 'container-fluid':'container noPadding'}}">-->
+            <div class="container">
+                <!--<div class="container-fluid">-->
+                <!--<ol class="breadcrumb" ng-show="showHeader">
+                    <li><a href="#">Assessment Reports</a></li>
+                    <li class="active"><a href="#">Assessment Summary</a></li>
+                </ol>-->
+                <div ng-view="" class="theDashboard"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <footer class="footer" ng-show="showHeader">
+            <div class="footerContent">
+                <p>© Copyright 2015, Polk County School District. powered by <a href="#">Blender</a>. All Rights Reserved.</p>
+                <p>Need help or technical support? <a href="#">Contact Support.</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <!--[if lt IE 9]>
+    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <!--<div ng-view="" class="theDashboard"></div>-->
+
+    <script src="js/underscore-min.js"></script>
+    <!--<script src="js/jquery.min.js"></script>-->
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/angular.js"></script>
+    <script src="js/elasticQuery.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/ui-bootstrap-tpls.min.js"></script>
+    <!--<script src="js/ui-bootstrap-tpls-0.13.0.min.js"></script>-->
+    <script src="js/sortable.js"></script>
+    <script src="js/angular-ui-dashboard.js"></script>
+    <script src="js/angular-sanitize.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.0/angular-resource.js"></script>
+    <!--<script src="http://ec2-52-6-54-8.compute-1.amazonaws.com/jasperserver-pro/client/visualize.js?_opt=false&logLevel=debug"></script>-->
+    <script src="http://jaspersoft.education-insights.com/jasperserver-pro/client/visualize.js"></script>
+    <script src="js/angular-visualize-directive.js"></script>
+    <script src="js/demo.js"></script>
+
+    <script src="js/angular-grid.js?ignore=notused2"></script>
+    <link rel="stylesheet" type="text/css" href="css/angular-grid.css?ignore=notused2">
+    <link rel="stylesheet" type="text/css" href="css/theme-fresh.css?ignore=notused2">
+
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-select.js"></script>
+    <script src="js/jquery.combobox.js"></script>
+    <script src="js/jquery.easyui.min.js"></script>
+    <script src="js/jquery.nicescroll.min.js"></script>
+    <script src="js/require.js"></script>
+    <script src="bower_components/elasticsearch/elasticsearch.js"></script>
+    <script type="text/javascript">
+        var saveToLocalStorage;
+        var getDataFromServer;
+        //var changeScrollModal;
+        var logReportMessage;
+        var client = elasticsearch.Client({
+            host: 'http://52.3.213.207:9200'
+        });
+
+
+
+        $(document).ready(function ()
+        {
+            $('select').change(function(){
+                $("#width_tmp").html($('select option:selected').text());
+                $(this).width($("#width_tmp").width() + 45);
+            });
+            
+            sessionService = function ()
+            {
+                var currentDate = new Date(window.localStorage['time']);
+                var now = new Date();
+                var newTime = now - currentDate;
+                if (newTime > 60000000)
+                {
+                    alert("Session Expired!Please log in and try again");
+                    window.localStorage['demo-layouts'] = '';
+                    window.localStorage['userLogedIn'] = '';
+                    window.localStorage['id'] = '';
+                    window.localStorage['userRole'] = '';
+                    window.localStorage['storageParam'] = '';
+                    location.href = 'index.html';
+                    throw new Error("Session Expired!Please log in and try again");
+
+                }
+                else
+                {
+                    window.localStorage['time'] = now;
+                }
+                //var headers = {
+                //    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                //};
+                //$.ajax({
+                //    type: 'POST',
+                //    url: "http://54.164.139.20:8080/api/addLog",
+                //    data: "id=" + window.localStorage['id'] + "&username=" + window.localStorage['userLogedIn'] + "&activity=" + a,
+                //    headers: headers
+                //}).success(function (response) {
+                //});
+
+            }
+            logReportMessage = function (a)
+            {
+
+                console.log("logReportMessage");
+                var headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: "http://54.164.139.20:8080/api/addLog",
+                    data: "id=" + window.localStorage['id'] + "&username=" + window.localStorage['userLogedIn'] + "&activity=" + a,
+                    headers: headers
+                }).success(function (response)
+                {
+                });
+
+            }
+
+
+            saveToLocalStorage = function ()
+            {
+                var headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                };
+                if ((window.localStorage['demo-layouts'] != null) && (window.localStorage['demo-layouts'] != "") && (window.localStorage['storageParam'] != null) && (window.localStorage['storageParam'] != ''))
+                {
+                    $.ajax({
+                        url: "http://54.164.139.20:8080/api/saveTabs",
+                        type: 'POST',
+                        headers: headers,
+                        data: "id=" + window.localStorage['id'] + "&storage=" + window.localStorage['demo-layouts'] + "&storageParam=" + window.localStorage['storageParam'],
+                    }).success(function (response)
+                    {
+                        console.log("saved to mongodb");
+                    });
+                }
+            };
+
+            getDataFromServer = function ()
+            {
+                var headers = {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                };
+
+                $.ajax({
+                    url: "http://54.164.139.20:8080/api/getTabs",
+                    type: 'POST',
+                    headers: headers,
+                    async: false,
+                    data: "id=" + window.localStorage['id']
+                }).success(function (response)
+                {
+                    if (response.storageParam != 'undefined')
+                    {
+                        console.log("get data from mongodb");
+                        localStorage.setItem('storageParam', response.storageParam);
+                    }
+                    else
+                    {
+                        window.localStorage['storageParam'] = "";
+                    }
+                })
+            };
+        });
+        function setWidgetHeight()
+        {
+            $('.widget-container').each(function ()
+            {
+                var widgetContainerH = $(this).outerHeight();
+                var filtersH = $('.chartFilters', this).outerHeight(true);
+                var buttonsH = $('.chartUpperBtns', this).outerHeight(true);
+                var minusH = filtersH + buttonsH + 57;
+                $(this).find('.reportContainer').css('height', widgetContainerH - minusH + 'px');
+            });
+        }
+        //function changeScrollModal() {
+        //    //$('.modal-drill').on('shown.bs.modal', function () {
+        //        $('.modal-body').niceScroll({
+        //            cursorcolor: "#333",
+        //            cursoropacitymin: .2,
+        //            cursoropacitymax: .6,
+        //            cursorwidth: "9px",
+        //            cursorborder: "0",
+        //            cursorborderradius: "3px",
+        //            zindex: "9998",
+        //            scrollspeed: "90",
+        //            touchbehavior: false,
+        //            autohidemode: true,
+        //            smoothscroll: false,
+        //            nativeparentscrolling: false
+        //        })
+
+        //    //});
+        //    //$('.modal-drill').on('hidden.bs.modal', function () {
+        //    //    $('.modal-body').getNiceScroll().remove();
+        //    //})
+        //}
+
+        function changeScroll()
+        {
+            setWidgetHeight();
+            $('.reportContainer').niceScroll({
+                cursorcolor: "#333",
+                cursoropacitymin: .2,
+                cursoropacitymax: .6,
+                cursorwidth: "9px",
+                cursorborder: "0",
+                cursorborderradius: "3px",
+                zindex: "111",
+                scrollspeed: "60",
+                touchbehavior: false,
+                autohidemode: true,
+                boxzoom: true,
+                dblclickzoom: false
+            });
+        }
+        $(window).resize(function ()
+        {
+            setWidgetHeight();
+        });
+
+        $(window).load(function ()
+        {
+            setWidgetHeight();
+
+            $("body").on("click", ".combo-arrow", function ()
+            {
+                $('.combo-p').find('.combo-panel').niceScroll({
+                    cursorcolor: "#333",
+                    cursoropacitymin: .2,
+                    cursoropacitymax: .6,
+                    cursorwidth: "9px",
+                    cursorborder: "0",
+                    cursorborderradius: "3px",
+                    zindex: "112",
+                    scrollspeed: "60",
+                    touchbehavior: false,
+                    autohidemode: true
+                })
+            });
+            $(".dropdown-menu").not('.bootstrap-select .dropdown-menu').niceScroll({
+                cursorcolor: "#333",
+                cursoropacitymin: .2,
+                cursoropacitymax: .5,
+                cursorwidth: "9px",
+                cursorborder: "0",
+                cursorborderradius: "3px",
+                zindex: "999",
+                scrollspeed: "60",
+                touchbehavior: false,
+                autohidemode: true
+            })
+            $("body, .searchDiv>.dropdown-menu").niceScroll({
+                cursorcolor: "#333",
+                cursoropacitymin: .2,
+                cursoropacitymax: .5,
+                cursorwidth: "9px",
+                cursorborder: "0",
+                cursorborderradius: "3px",
+                zindex: "110",
+                scrollspeed: "60",
+                touchbehavior: false,
+                autohidemode: true
+                //mousescrollstep - scrolling speed with mouse wheel, default value is 40 (pixel)
+                //hwacceleration - use hardware accelerated scroll when supported (default:true)
+                //boxzoom - enable zoom for box content (default:false)
+                //dblclickzoom - (only when boxzoom=true) zoom activated when double click on box (default:true)
+                //gesturezoom - (only when boxzoom=true and with touch devices) zoom activated when pitch out/in on box (default:true)
+                //grabcursorenabled, display "grab" icon for div with touchbehavior = true, (default:true)
+                //background, change css for rail background, default is ""
+                //iframeautoresize, autoresize iframe on load event (default:true)
+                //cursorminheight, set the minimum cursor height in pixel (default:20)
+                //preservenativescrolling, you can scroll native scrollable areas with mouse, bubbling mouse wheel event (default:true)
+                //railoffset, you can add offset top/left for rail position (default:false)
+                //bouncescroll, enable scroll bouncing at the end of content as mobile-like (only hw accell) (default:false)
+                //spacebarenabled, enable page down scrolling when space bar has pressed (default:true)
+                //railpadding, set padding for rail bar (default:{top:0,right:0,left:0,bottom:0})
+                //disableoutline, for chrome browser, disable outline (orange hightlight) when selecting a div with nicescroll (default:true)
+                //horizrailenabled, nicescroll can manage horizontal scroll (default:true)
+                //railalign, alignment of vertical rail (defaul:"right")
+                //railvalign, alignment of horizontal rail (defaul:"bottom")
+                //enabletranslate3d, nicescroll can use css translate to scroll content (default:true)
+                //enablemousewheel, nicescroll can manage mouse wheel events (default:true)
+                //enablekeyboard, nicescroll can manage keyboard events (default:true)
+                //smoothscroll, scroll with ease movement (default:true)
+                //sensitiverail, click on rail make a scroll (default:true)
+                //enablemouselockapi, can use mouse caption lock API (same issue on object dragging) (default:true)
+                //cursorfixedheight, set fixed height for cursor in pixel (default:false)
+                //hidecursordelay, set the delay in microseconds to fading out scrollbars (default:400)
+                //directionlockdeadzone, dead zone in pixels for direction lock activation (default:6)
+                //nativeparentscrolling , detect bottom of content and let parent to scroll, as native scroll does (default:true)
+                //enablescrollonselection, enable auto-scrolling of content when selection text (default:true)
+            });
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+C:\Polk\Polk\PolkAppDash\PolkAppDash\bin\PolkAppDash.dll.config
+C:\Polk\Polk\PolkAppDash\PolkAppDash\bin\PolkAppDash.dll
+C:\Polk\Polk\PolkAppDash\PolkAppDash\bin\PolkAppDash.pdb
+C:\Polk\Polk\PolkAppDash\PolkAppDash\obj\Debug\PolkAppDash.dll
+C:\Polk\Polk\PolkAppDash\PolkAppDash\obj\Debug\PolkAppDash.pdb
+C:\Polk\Polk\PolkAppDash\PolkAppDash\obj\Debug\PolkAppDash.csprojResolveAssemblyReference.cache
+E:\Amirotech\SpectaculearnAPI\dev\bin\PolkAppDash.dll.config
+E:\Amirotech\SpectaculearnAPI\dev\bin\PolkAppDash.dll
+E:\Amirotech\SpectaculearnAPI\dev\bin\PolkAppDash.pdb
+E:\Amirotech\SpectaculearnAPI\dev\obj\Debug\PolkAppDash.csprojResolveAssemblyReference.cache
+E:\Amirotech\SpectaculearnAPI\dev\obj\Debug\PolkAppDash.dll
+E:\Amirotech\SpectaculearnAPI\dev\obj\Debug\PolkAppDash.pdb

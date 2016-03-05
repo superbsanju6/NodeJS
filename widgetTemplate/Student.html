@@ -1,0 +1,94 @@
+﻿<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="buttonStudent">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="spinnerStudentProfile"></div>
+<div id="containerStudent"></div>
+<script type='text/javascript'>
+    $(document).ready(function () {
+        sessionService();
+        logReportMessage("Ran Student Profile Report");
+        var stdId = window.localStorage['stdId'];
+        console.log(stdId);
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerStudentProfile");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        };
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, 
+        function (v) {
+            report100 = v.report({
+                resource: "/Polk_County_Reporting/Reports/Student/Student_Profile",
+                container: "#containerStudent",
+                params: getSelection100(),
+                success: function () {
+                    $("#spinnerStudentProfile").hide();
+                },
+                error: function (error) {
+                    logReportMessage("Error Running Student Profile Report");
+                    console.log(error);
+                }
+            });//map_canvas_2010355477
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $selectStudent = buildControl("Export to: ", reportExports, 'selectStudent');
+            $buttonStudent = $("#buttonStudent");
+            $buttonStudent.click(function () {
+                sessionService();
+                console.log($selectStudent.val());
+                report100.export({
+                    //export options here
+                    outputFormat: $selectStudent.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+            function getSelection100() {
+                return {
+                    "studentId": [stdId]
+                }
+            }
+        }
+        );
+        function buildControl(name, options, selectID) {
+            function buildOptions(options) {
+                var template = "<option>{value}</option>";
+                return options.reduce(function (memo, option) {
+                    return memo + template.replace("{value}", option);
+                }, "")
+            }
+            var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                content = template.replace("{label}", name)
+                    .replace("{options}", buildOptions(options));
+
+            var $control = $(content);
+            $control.insertAfter($("#buttonStudent"));
+            //return select
+            return $($control[1]);
+        }
+    });
+</script>
+
+

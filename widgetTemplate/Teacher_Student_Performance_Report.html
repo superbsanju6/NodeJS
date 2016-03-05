@@ -1,0 +1,248 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_demo_criteriaSPR">Student</label>
+            <select id="teacher_demo_criteriaSPR"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_test_typeSPR">Select Test Type</label>
+            <select id="teacher_dashboard_test_typeSPR"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_testSPR">Select Test</label>
+            <select id="teacher_dashboard_testSPR"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_schoolSPR">Select School</label>
+            <select id="teacher_dashboard_schoolSPR"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_teacherSPR">Select Teacher</label>
+            <select id="teacher_dashboard_teacherSPR"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_classSPR">Select Class</label>
+            <select id="teacher_dashboard_classSPR"></select>
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button24">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerStudentperformanceReport"></div>
+<div id="Student_Performance_DIV" class="reportContainer reportShorter"></div>
+
+    <script type='text/javascript'>
+        changeScroll();
+        var reportUri = "/Polk_County__Studio_/Reports__Studio_/Teacher/polkStudentPerformanceReport";
+        var inputUri = "/Polk_County__Studio_/Reports__Studio_/Teacher/polkStudentPerformanceReport"
+        var report24, inputControls24;
+        var vv24;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerStudentperformanceReport");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        function viewReport() {
+            $("#spinnerStudentperformanceReport").show();
+            report24 = vv24.report({
+                resource: "/Polk_County__Studio_/Reports__Studio_/Teacher/polkStudentPerformanceReport",
+                container: "#Student_Performance_DIV",
+                params: getSelection(),
+                success: function () {
+                    $("#spinnerStudentperformanceReport").hide();
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+                //,
+
+                //events: {
+                //    beforeRender: function (el) {
+                //        console.log(widgetHeightDefault);
+                //        $("#Student_Performance_DIV").find("._jr_report_container_").css({
+
+                //            "max-height": widgetHeightDefault + "px",
+                //            "overflow": "auto"
+                //        });
+                //        $("#spinnerStudentperformanceReport").hide();
+
+                //    }
+
+                //}
+            });
+        };
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+            vv24 = v;
+            inputControls24 = v.inputControls({
+                resource: reportUri,
+                success: renderInputControls
+            });
+            $('#teacher_demo_criteriaSPR').on("change", updateCascade);
+            $('#teacher_dashboard_test_typeSPR').on("change", updateCascade);
+            $('#teacher_dashboard_testSPR').on("change", updateCascade);
+            $('#teacher_dashboard_schoolSPR').on("change", updateCascade);
+            $('#teacher_dashboard_teacherSPR').on("change", updateCascade);
+            $('#teacher_dashboard_classSPR').on("change", updateCascade);
+
+            //$("#Student_Performance_DIV").hide();
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select24 = buildControl("Export to: ", reportExports, 'select24'),
+            $button24 = $("#button24"),
+
+            $button24.click(function () {
+                console.log($select24.val());
+                report24.export({
+                    //export options here
+                    outputFormat: $select24.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button24"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection() {
+
+            return {
+                "testType": [$("#teacher_demo_criteriaSPR").val()],
+                "testType": [$("#teacher_dashboard_test_typeSPR").val()],
+                "testId": [$("#teacher_dashboard_testSPR").val()],
+                "schoolId": [$("#teacher_dashboard_schoolSPR").val()],
+                "teacherId": [$("#teacher_dashboard_teacherSPR").val()],
+                "classId": [$("#teacher_dashboard_classSPR").val()]
+
+            }
+        }
+        function updateCascade() {
+            $("#spinnerStudentperformanceReport").show();
+
+            inputControls24
+                    .params(getSelection())
+                    .run()
+                    .then(renderInputControls)
+                    .then(function () {
+
+                        $('#spinnerStudentperformanceReport').hide();
+                    });
+        }
+        function showSpinner() {
+            $('#spinnerStudentperformanceReport').show();
+        }
+        function renderInputControls(data) {
+            $("#teacher_demo_criteriaSPR").empty();
+            $("#teacher_dashboard_test_typeSPR").empty();
+            $("#teacher_dashboard_testSPR").empty();
+            $("#teacher_dashboard_schoolSPR").empty();
+            $("#teacher_dashboard_teacherSPR").empty();
+            $("#teacher_dashboard_classSPR").empty();
+
+            console.log(data);
+            var TestTypeInputControl = _.findWhere(data, { id: "studentId" });
+            var select = $("#teacher_demo_criteriaSPR");
+            _.each(TestTypeInputControl.state.options, function (option) {
+                select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+
+
+            });
+            var TestTypeInputControl = _.findWhere(data, { id: "testType" });
+            var select = $("#teacher_dashboard_test_typeSPR");
+            _.each(TestTypeInputControl.state.options, function (option) {
+                select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+
+
+            });
+            var TestInputControl = _.findWhere(data, { id: "testId" });
+            var select = $("#teacher_dashboard_testSPR");
+            _.each(TestInputControl.state.options, function (option) {
+                select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+            });
+
+
+
+
+            var SchoolInputControl = _.findWhere(data, { id: "schoolId" });
+            var select = $("#teacher_dashboard_schoolSPR");
+            _.each(SchoolInputControl.state.options, function (option) {
+                select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+            });
+
+            var SchoolInputControl = _.findWhere(data, { id: "teacherId" });
+            var select = $("#teacher_dashboard_teacherSPR");
+            _.each(SchoolInputControl.state.options, function (option) {
+                select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+            });
+
+            var SchoolInputControl = _.findWhere(data, { id: "classId" });
+            var select = $("#teacher_dashboard_classSPR");
+            _.each(SchoolInputControl.state.options, function (option) {
+                select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+            });
+
+            $("#spinnerStudentperformanceReport").hide();
+        }
+    </script>
+
+

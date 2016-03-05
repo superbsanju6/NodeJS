@@ -1,0 +1,381 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="test_name">Test</label>
+            <input type="multiselect" id="test_Name" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="school_name">School</label>
+            <input type="multiselect" id="school_Name" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="mastered_checked">Mastered</label>
+            <input type="checkbox" id="mastered_checked" />
+</div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonSM" onclick="viewReport15()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button15">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerMasteryChart"></div>
+<div id="containerMasteryChart" class="reportContainer"></div>
+
+<script type='text/javascript'>
+    changeScroll();
+    var report15;
+    var viewReport15;
+    $(document).ready(function () {
+        sessionService();
+        //logReportMessage("Ran Standard Mastery Report");
+        var reportUri15 = "/Landon/ibtp_standardMasteryChart";
+        var inputUri15 = "/Landon/ibtp_standardMasteryChart";
+        var inputControls15;
+        var vv15;
+        var report15FirstDisplay = true;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerMasteryChart");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+         
+        viewReport15 = function () {
+            sessionService();
+            if ($("#school_Name").combobox('getText') != "---" && $("#school_Name").combobox('getText').length > 0 &&
+              $("#test_Name").combobox('getText') != "---" && $("#test_Name").combobox('getText').length > 0 &&
+              $("#mastered_checked").combobox('getText') != "---" && $("#mastered_checked").combobox('getText').length > 0) {
+
+                $('#spinnerMasteryChart').show();
+
+                report15 = vv15.report({
+                    resource: "/Landon/ibtp_standardMasteryChart",
+                    container: "#containerMasteryChart",
+                    params: getSelection(),
+                    success: function () {
+
+                        $('#spinnerMasteryChart').hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running Standard Mastery Report");
+                        console.log(error);
+                    },
+                    events: {
+                        beforeRender: function (el) { 
+                            $("#spinnerMasteryChart").hide();
+
+                        }
+
+                    }
+                });
+
+
+                var standard_mastery_chart_param =
+                 {
+                     'standard_mastery_chart_param': [{
+
+                         'param1': $("#school_Name").combobox('getValues'),
+                         'param2': $("#test_Name").combobox('getValues'),
+                         'param3': $("#mastered_checked").is(":checked")
+
+                     }]
+
+                 };
+                logReportMessage("Ran Standard Mastery Report with following parameters: School Name- " + $("#school_Name").combobox('getText') +
+                    " Test Name- " + $("#test_Name").combobox('getText'));
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].standard_mastery_chart_param) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'standard_mastery_chart_param': [{
+                                'param1': '',
+                                'param2': '',
+                                'param3': ''
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(standard_mastery_chart_param);
+
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else {
+                alert("Please select all parameter in order to view Student Standart Mastery Report");
+            }
+           
+        };
+
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+            vv15 = v;
+            inputControls15 = v.inputControls({
+                resource: inputUri15,
+                success: renderInputControls,
+                error: function (error) {
+                    logReportMessage("Error Loading Input Controls For Standard Mastery Report");
+                    console.log(error);
+                }
+            });
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select15 = buildControl("Export to: ", reportExports, 'select15'),
+            $button15 = $("#button15"),
+
+            $button15.click(function () {
+                sessionService();
+                console.log($select15.val());
+                report15.export({
+                    //export options here
+                    outputFormat: $select15.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button15"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection() {
+
+            return {
+                "testName_1": $("#test_Name").combobox('getValues'),
+                "NewMeasure_1_1": [$("#mastered_checked").is(":checked").toString()],
+                "school_1": $("#school_Name").combobox('getValues')
+
+            }
+        }
+        function updateCascadeStandardMC() {
+            showSpinner();
+           
+            inputControls15
+                    .params(getSelection())
+                    .run()
+                    .then(renderInputControls)
+                    .then(function () { 
+                      
+                        $('#spinnerMasteryChart').hide();
+                    });
+
+        }
+        function showSpinner() {
+            $('#spinnerMasteryChart').show();
+        }
+        function renderInputControls(data) {
+           
+            
+            $("#test_Name").empty();
+            $("#school_Name").empty();
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+
+            if (report15FirstDisplay) {
+               
+                getDataFromServer();
+
+              
+            }
+
+
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                console.log("set old local storage");
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'standard_mastery_chart_param': [{
+                            'param1': '',
+                            'param2': '',
+                            'param3':''
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+
+
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                
+                if (!report15FirstDisplay) {
+
+                    break;
+                }
+              
+                if (oldLocalStorage[i].standard_mastery_chart_param) {
+                 
+                    isInLocalStorage = true;
+                 
+
+                    var SchoolInputControl = _.findWhere(data, { id: "school_1" });
+                    var select = $("#school_Name");
+                    _.each(SchoolInputControl.state.options, function (option) {
+                        if (option.label == oldLocalStorage[i].standard_mastery_chart_param[0].param1) {
+                          
+                            option.selected = true;
+                        
+                        }
+                        else {
+                        
+                            option.selected = false;
+                        }
+                    });
+                    $("#school_Name").combobox({
+                        data: SchoolInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascadeStandardMC
+                    });
+
+                    var TestInputControl = _.findWhere(data, { id: "testName_1" });
+                    var select = $("#test_Name");
+
+                    _.each(TestInputControl.state.options, function (option) {
+                        if (option.label == oldLocalStorage[i].standard_mastery_chart_param[0].param2) {
+                           
+                            option.selected = true;
+
+                        }
+                        else {
+                         
+                            option.selected = false;
+                        }
+                    });
+                    $("#test_Name").combobox({
+                        data: TestInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascadeStandardMC
+                    });
+ 
+                    if (oldLocalStorage[i].standard_mastery_chart_param[0].param3 == true) {
+
+                        $("#mastered_checked").prop("checked", true);
+
+                    }
+                    else {
+                        $("#mastered_checked").prop("checked", false);
+                    }
+
+                    report15FirstDisplay = false;
+                    viewReport15();
+                   
+                
+                    break;
+
+                }
+            }
+
+
+            if (!isInLocalStorage) {
+
+
+                console.log(data);
+                var TestInputControl = _.findWhere(data, { id: "testName_1" });
+                var select = $("#test_Name");
+          
+                $("#test_Name").combobox({
+                    data: TestInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascadeStandardMC
+                });
+
+                var SchoolInputControl = _.findWhere(data, { id: "school_1" });
+                var select = $("#school_Name");
+              
+                $("#school_Name").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascadeStandardMC
+                });
+                var checkbox = _.findWhere(data, { id: "NewMeasure_1_1" })
+                
+                if (checkbox.state.value==true) {
+                    $("#mastered_checked").prop("checked", true);
+
+            }
+                else {
+                    $("#mastered_checked").prop("checked", false);
+                }
+            }
+
+
+            $('#spinnerMasteryChart').hide();
+            report15FirstDisplay = false;
+        }
+    });
+</script>

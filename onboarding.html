@@ -1,0 +1,29 @@
+﻿<div ng-controller="CarouselDemoCtrl" id="onboardingModal">
+    <!--<div class="modal-header">
+        <h3 class="modal-title">ONBOARDING Test</h3>
+    </div>-->
+
+    <div style="height: 100%">
+        <carousel interval="myInterval" no-wrap="noWrapSlides" ng-mouseenter="pause()" ng-mouseleave="play()" id="onboardingCarousel">
+            <slide ng-repeat="slide in slides" active="slide.active" class="slide{{$index}}">
+                <div class="carousel-image" style="background-image:url({{slide.image}});">
+
+                </div>
+                <!--<img ng-src="" style="margin:auto;">-->
+                <div class="carousel-caption">
+                    <!--<h4>Slide {{$index}}</h4>-->
+                    <h4>{{slide.title}}</h4>
+                    <p>{{slide.text}}</p>
+                </div>
+                <div ng-if="$index==3" style="position:absolute;bottom:0;left:0;right:0;z-index:11;cursor:pointer">
+                    <h1 ng-click="cancel()" style="color:#fff;"><strong><i class="fa fa-check-square-o" style="color:#fff;cursor:pointer"> </i> FINISH</strong></h1>
+                </div>
+            </slide>
+        </carousel>
+    </div>
+    <div class="modal-footer">
+        <!--<button class="btn btn-primary" ng-click="ok()">OK</button>-->
+        <span ng-click="cancel()" style="color:#fff;cursor:pointer">Skip</span>
+        <!--<button class="btn btn-warning" ng-click="cancel()">Skip</button>-->
+</div>
+</div>

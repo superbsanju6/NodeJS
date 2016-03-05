@@ -1,0 +1,213 @@
+﻿<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        
+        <link href="css/font-awesome.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link href="dist/css/bootstrap.css" rel="stylesheet" />
+        
+        <link href="css/angular-ui-dashboard.css" rel="stylesheet" />
+        <link href="css/dashStyle.css" rel="stylesheet" />
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    </head>
+<body ng-app="app">
+    <!--[if lt IE 8]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <!-- Begin page content -->
+    <div class="container-fluid">
+        <div class="row page-header">
+            <div class="container">
+                <nav class="navbar navbar-default headerMain">
+                    <a class="navbar-brand"><img src="img/improve-logo.png" /></a>
+                    <div class="collapse navbar-collapse" id="navTR">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#"><strong>Site Admin</strong></a></li>
+                            <li><a href="#">Account</a></li>
+                            <li><a href="#">Support</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                        <form class="navbar-form navbar-right" role="search" style="position:relative">
+                                <input type="text" class="form-control inputSearch" placeholder="Search">
+                            <button type="submit" class="btn btn-default btn-sm search-button">Search</button>
+                        </form>
+                    </div>
+                </nav>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <nav class="navbar navbar-default navbar-main">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="#">Home <span class="sr-only">(current)</span></a></li>
+                            <li><a href="#">Org News</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Assessments<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Asse1</a></li>
+                                    <li><a href="#">Asse2</a></li>
+                                    <li><a href="#">Asse3</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Reports</a></li>
+                            <li><a href="#">Content Library</a></li>
+                            <li><a href="#">Data Dashboard</a></li>
+                            <li><a href="#">Workspaces</a></li>
+                            <li><a href="#">Admin</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="container noPadding">
+                <ol class="breadcrumb">
+                    <li><a href="#">Assessment Reports</a></li>
+                    <li class="active"><a href="#">Assessment Summary</a></li>
+                </ol>
+                <div ng-view="" class="theDashboard"></div>
+
+
+                <!--<div class="panel">
+            <div class="panel-heading">Report Filters - Assessment Summary</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h3>Find a Test</h3>
+                        <div ng-controller="DropdownCtrl" class="findTest">
+
+                            <div class="dropdown" dropdown on-toggle="toggled(open)">
+                                <strong>Grade: </strong>
+                                <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                    Click me for a dropdown, yo!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="choice in items">
+                                        <a href>{{choice}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown" dropdown on-toggle="toggled(open)">
+                                <strong>Subject: </strong>
+                                <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                    Click me for a dropdown, yo!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="choice in items">
+                                        <a href>{{choice}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown" dropdown on-toggle="toggled(open)">
+                                <strong>Assessment: </strong>
+                                <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                    Click me for a dropdown, yo!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Lorem</a></li>
+                                    <li><a href="#">Lorem</a></li>
+                                    <li><a href="#">Lorem</a></li>
+                                    <li><a href="#">Lorem</a></li>
+                                    <li><a href="#">Lorem</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h3>Reporting Population</h3>
+                        <div ng-controller="DropdownCtrl" class="findTest">
+
+                            <div class="dropdown" dropdown on-toggle="toggled(open)">
+                                <strong>District: </strong>
+                                <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                    Click me for a dropdown, yo!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="choice in items">
+                                        <a href>{{choice}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown" dropdown on-toggle="toggled(open)">
+                                <strong>School: </strong>
+                                <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                    Click me for a dropdown, yo!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="choice in items">
+                                        <a href>{{choice}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown" dropdown on-toggle="toggled(open)">
+                                <strong>Teacher: </strong>
+                                <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                    Click me for a dropdown, yo!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="choice in items">
+                                        <a href>{{choice}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="dropdown" dropdown on-toggle="toggled(open)">
+                                <strong>Class: </strong>
+                                <a href class="dropdown-toggle btn btn-default  btn-sm" dropdown-toggle ">
+                                    Click me for a dropdown, yo!
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li ng-repeat="choice in items">
+                                        <a href>{{choice}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <br style="clear:both" />
+                    <input type="button" class="btn btn-info center-block" value="VIEW REPORT" />
+                </div>
+            </div>
+        </div>-->
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <p>© Copyright 2015, Polk County School District. powered by <a href="#">Blender</a>. All Rights Reserved.</p>
+            <p>Need help or technical support? <a href="#">Contact Support.</a></p>
+        </div>
+    </footer>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/angular.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/ui-bootstrap-tpls.min.js"></script>
+    <script src="js/sortable.js"></script>
+    <script src="js/angular-ui-dashboard.js"></script>
+    <script src="https://code.angularjs.org/1.3.0/angular-resource.js"></script>
+    <script src="http://ec2-52-6-54-8.compute-1.amazonaws.com/jasperserver-pro/client/visualize.js"></script>
+    <script src="js/angular-visualize-directive.js"></script>
+    <script src="js/demo.js"></script>
+
+    <script src="dist/js/bootstrap.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/polk_app.js"></script>
+    
+</body>
+</html>

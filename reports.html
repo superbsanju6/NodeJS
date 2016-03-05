@@ -1,0 +1,254 @@
+﻿<script>$(document).ready(function () {
+    $('.widget-ew-resizer').mouseup(function () {
+        alert('in ucr');
+    });
+})
+</script>
+<div>
+    <div class="row theReports">
+        <div class="col-md-12">
+            <div class="panel">
+                <!--<div class="panel-heading">Report Filters - Assessment Summary</div>-->
+                <div class="panel-heading">
+                    <h3 class="panel-title">Select Report</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row eqHeights no-margin">
+                        <div class="lev2-panel col-sm-4">
+                            <div class="lev2-panel-heading">Teacher</div>
+                            <ul class="list-unstyled">
+                                <li><a href="#report?v=New_Student_Item_Analysis_Report&n=Student Item Analysis" onclick="addAction('Viewed Student Item Analysis Report')">Student Item Analysis</a></li>
+                                <li><a href="#report?v=New_Student_Standard_Progress&n=Student Standard Progress" onclick="addAction('Viewed Student Standard Progress')">Student Standard Progress</a></li>
+                                <li><a href="#report?v=New_Student_Test_Progress&n=Student Test Progress" onclick="addAction('Viewed Student Test Progress Report')">Student Test Progress</a></li>
+                                <!--<li><a><s>Student Standard Proficiency</s></a></li>-->
+                                <li><a href="#report?v=New_Student_Test_Performance&n=Student Test Performance" onclick="addAction('Viewed Student Test Performance Report')">Student Test Performance</a></li>
+                                <li><a href="#report?v=New_Class_Standard_Proficiency&n=Class Standard Proficiency" onclick="addAction('Viewed Class Standard Proficiency Report')">Class Standard Proficiency</s></a></li>
+                                <li><a href="#report?v=New_Student_Remediation&n=Student Remediation" onclick="addAction('Viewed Student RemediationStudent Remediation Report')">Student Remediation</a></li>
+                                <li><a href="#report?v=New_Teacher_Dashboard&n=Teacher Dashboard" onclick="addAction('Viewed Teacher Dashboard')">Teacher Dashboard</a></li>
+                                <li><a href="#report?v=New_Student_Roster&n=Student Roster" onclick="addAction('Viewed Student Roster Report')">Student Roster</a></li>
+                            </ul>
+                        </div>
+                        <div class="lev2-panel col-sm-4">
+                            <div class="lev2-panel-heading">School Administrators</div>
+                            <ul class="list-unstyled">
+                                <li><a href="#report?v=New_School_Test_Performance&n=School Test Performance" onclick="addAction('Viewed School Test Performance Report')">School Test Performance</a></li>
+                                <li><a href="#report?v=New_School_Standard_Proficiency&n=School Standard Proficiency" onclick="addAction('Viewed School Standard Proficiency Report')">School Standard Proficiency</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="lev2-panel col-sm-4">
+                            <div class="lev2-panel-heading">District Administrators</div>
+                            <ul class="list-unstyled">
+                                <li><a href="#report?v=New_District_Standard_Proficiency_Report&n=District Standard Proficiency" onclick="addAction('Viewed District Standard Proficiency Report')">District Standard Proficiency</a></li>
+                                <li><a href="#report?v=New_District_Standard_Mastery&n=District Standard Mastery" onclick="addAction('Viewed District Standard Mastery Report')">District Standard Mastery</a></li>
+                            </ul>
+                        </div>
+                        <!--<div class="col-lg-6">
+                    <h3>Find a Test</h3>
+                    <div ng-controller="DropdownCtrl" class="findTest">
+
+                        <div class="dropdown" dropdown on-toggle="toggled(open)">
+                            <strong>Grade: </strong>
+                            <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                Click me for a dropdown, yo!
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="choice in items">
+                                    <a href>{{choice}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown" dropdown on-toggle="toggled(open)">
+                            <strong>Subject: </strong>
+                            <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                Click me for a dropdown, yo!
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="choice in items">
+                                    <a href>{{choice}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown" dropdown on-toggle="toggled(open)">
+                            <strong>Assessment: </strong>
+                            <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                Click me for a dropdown, yo!
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Lorem</a></li>
+                                <li><a href="#">Lorem</a></li>
+                                <li><a href="#">Lorem</a></li>
+                                <li><a href="#">Lorem</a></li>
+                                <li><a href="#">Lorem</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3>Reporting Population</h3>
+                    <div ng-controller="DropdownCtrl" class="findTest">
+
+                        <div class="dropdown" dropdown on-toggle="toggled(open)">
+                            <strong>District: </strong>
+                            <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                Click me for a dropdown, yo!
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="choice in items">
+                                    <a href>{{choice}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown" dropdown on-toggle="toggled(open)">
+                            <strong>School: </strong>
+                            <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                Click me for a dropdown, yo!
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="choice in items">
+                                    <a href>{{choice}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown" dropdown on-toggle="toggled(open)">
+                            <strong>Teacher: </strong>
+                            <a href class="dropdown-toggle btn btn-default btn-sm" dropdown-toggle ">
+                                Click me for a dropdown, yo!
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="choice in items">
+                                    <a href>{{choice}}</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="dropdown" dropdown on-toggle="toggled(open)">
+                            <strong>Class: </strong>
+                            <a href class="dropdown-toggle btn btn-default  btn-sm" dropdown-toggle ">
+                                Click me for a dropdown, yo!
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li ng-repeat="choice in items">
+                                    <a href>{{choice}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>-->
+                        <!--<input type="button" class="btn btn-default btn-xs center-block" value="VIEW REPORT" />-->
+                        <!--<div class="col-sm-12">
+                            <div class='col-lg-4 col-md-6' ng-if="userRole=='District'">
+                                <ul class="list-bullet">
+                                    <li><a href="#report?v=standardMasteryChart&n=Student Standard Mastery Report">Student Standard Mastery Report</a></li>
+                                    <li><a href="#report?v=District_Administrator_School_Performance_by_Test&n=School Standard Performance Report">School Standard Performance Report</a></li>
+                                    <li><a href="#report?v=District_Administrator_School_Standard_Performance_by_Subject_Area_Report_Pie_Chart&n=School Standard Performance by Subject Report">School Standard Performance by Subject Report</a></li>
+                                    <li><a href=""><s>Student Standard Performance Report</s></a></li>
+                                    <li><a href=""><s>Student Item Analysis Report</s></a></li>
+                                    <li><a href="#report?v=District_Administrator_School_Comparison_Report_Chart&n=School vs District Test Performance Report">School vs District Test Performance Report</a></li>
+                                    <li><a href=""><s>District Performance Report</s></a></li>
+                                </ul>
+                            </div>
+                            <div class='col-lg-4 col-md-6' ng-if="userRole=='School'">
+                                <ul class="list-bullet">
+                                    <li><a href="#report?v=Administrator_Student_Standard_Performance_Report&n=School Standard Performance Report">School Standard Performance Report</a></li>
+                                    <li><a href="#report?v=performanceSummaryDashboard&n=Performance Summary Dashboard">Performance Summary Dashboard</a></li>
+                                    <li><a href="#report?v=classPerformanceReport&n=Class Performance Report">Class Performance Report</a></li>
+                                </ul>
+                            </div>
+                            <div class='col-lg-4 col-md-6' ng-if="userRole=='Coach'">
+                                <ul class="list-bullet">
+                                    <li><a href=""><s>Class Performance Report</s></a></li>
+                                    <li><a href=""><s>School Standard Performance Report</s></a></li>
+                                    <li><a href="#report?v=Coach_Teacher_Standard_Performance_Report&n=Teacher Standard Performance Report">Teacher Standard Performance Report</a></li>
+                                    <li><a href=""><s>Class Standard Performance Report</s></a></li>
+                                    <li><a href=""><s>Student Standard Performance Report</s></a></li>
+                                </ul>
+                            </div>
+                            <div class='col-lg-4 col-md-6' ng-if="userRole=='Teacher'">
+                                <ul class="list-bullet">
+                                    <li><a href="#report?v=Teacher_Dashboard&n=Teacher Dashboard">Teacher Dashboard</a></li>
+                                    <li><a href="#report?v=Teacher_Student_Performance_Report_Chart&n=Student Performance Report">Student Performance Report</a></li>
+                                    <li><a href=""><s>Class Average Report</s></a></li>
+                                    <li><a href="#report?v=Teacher_Student_Item_Analysis_Report&n=Student Item Analysis Report">Student Item Analysis Report</a></li>
+                                    <li><a href=""><s>Class Comparison Report</s></a></li>
+                                    <li><a href="#report?v=Teacher_Student_Standard_Performance_Report&n=Student Standard Performance Report">Student Standard Performance Report</a></li>
+                                    <li><a href="#report?v=Teacher_Class_Standard_Proficiency_Report&n=Class Standard Proficiency Report">Class Standard Proficiency Report</a></li>
+                                    <li><a href="#report?v=Teacher_Student_Remediation_Report&n=Student Remediation Report">Student Remediation Report</a></li>
+                                    <li><a href="#report?v=Teacher_Class_Standard_Progress_View_Report&n=Class Standard Progress View Report">Class Standard Progress View Report</a></li>
+                                    <li><a href=""><s>Student Progress Report</s></a></li>
+                                    <li><a href="#report?v=Teacher_Student_Standard_Progress_Report&n=Student Standard Progress Report">Student Standard Progress Report</a></li>
+                                </ul>
+                            </div>
+
+                            <div class='col-sm-12' ng-if="userRole=='Superuser'">
+                                <div class='col-lg-4 col-md-6'>
+                                    <ul class="list-bullet">
+                                        <li><a href="#report?v=Teacher_Dashboard&n=Teacher Dashboard" onclick="addAction('Viewed Teacher Dashboard')">Teacher Dashboard</a></li>
+                                        <li><a href="#report?v=Teacher_Student_Performance_Report_Grid_Only&n=Student Performance Report" onclick="addAction(' Viewed Student Performance Report')">Student Performance Report</a></li>
+                                        <li><a href="#report?v=Teacher_Student_Remediation_Report_ForTD&n=Student Remediation Report" onclick="addAction('Viewed Student Remediation Report')">Student Remediation Report</a></li>
+                                        <li><a href="#report?v=standardMasteryChart&n=Student Standard Mastery Report" onclick="addAction('Viewed Student Standard Mastery Report')">Student Standard Mastery Report</a></li>
+                                        <li><a href="#report?v=District_Administrator_School_Performance_by_Test&n=School Standard Performance Report" onclick="addAction('Viewed School Standard Performance Report')">School Standard Performance Report</a></li>
+                                        <li><a href="#report?v=District_Administrator_School_Standard_Performance_by_Subject_Area_Report_Pie_Chart&n=School Standard Performance by Subject Area Report" onclick="addAction('Viewed School Standard Performance by Subject Area Report')">School Standard Performance by Subject Area Report</a></li>
+                                        <li><a href=""><s>Student Standard Performance Report</s></a></li>
+                                        <li><a href=""><s>Student Item Analysis Report</s></a></li>
+                                        <li><a href="#report?v=District_Administrator_School_Comparison_Report_Chart&n=School vs District Test Performance Report" onclick="addAction('Viewed School vs District Test Performance Report')">School vs District Test Performance Report</a></li>
+
+                                    </ul>
+                                </div>
+                                <div class='col-lg-4 col-md-6'>
+                                    <ul class="list-bullet">
+                                        <li><a href=""><s>District Performance Report</s></a></li>
+                                        <li><a href="#report?v=Administrator_Student_Standard_Performance_Report&n=School Standard Performance Report" onclick="addAction('Viewed School Standard Performance Report')">School Standard Performance Report</a></li>
+                                        <li><a href="#report?v=performanceSummaryDashboard&n=Performance Summary Dashboard" onclick="addAction('Viewed Performance Summary Dashboard')">Performance Summary Dashboard</a></li>
+                                        <li><a href=""><s>Class Performance Report</s></a></li>
+                                        <li><a href=""><s>School Standard Performance Report</s></a></li>
+                                        <li><a href="#report?v=Coach_Teacher_Standard_Performance_Report&n=Teacher Standard Performance Report" onclick="addAction('Viewed Teacher Standard Performance Report')">Teacher Standard Performance Report</a></li>
+                                        <li><a href=""><s>Class Standard Performance Report</s></a></li>
+                                        <li><a href=""><s>Student Standard Performance Report</s></a></li>
+                                        <li><a href="#report?v=Teacher_Student_Performance_Report_Chart&n=Student Performance Report" onclick="addAction('Viewed Student Performance Report')">Student Performance Report</a></li>
+                                    </ul>
+                                </div>
+                                <div class='col-lg-4 col-md-6'>
+                                    <ul class="list-bullet">
+                                        <li><a href=""><s>Class Average Report</s></a></li>
+                                        <li><a href="#report?v=Teacher_Student_Item_Analysis_Report&n=Student Item Analysis Report" onclick="addAction('Viewed Student Item Analysis Report')">Student Item Analysis Report</a></li>
+                                        <li><a href=""><s>Class Comparison Report</s></a></li>
+                                        <li><a href="#report?v=Teacher_Student_Standard_Performance_Report&n=Student Standard Performance Report" onclick="addAction('Viewed Student Standard Performance Report')">Student Standard Performance Report</a></li>
+                                        <li><a href="#report?v=Teacher_Class_Standard_Proficiency_Report&n=Class Standard Proficiency Report" onclick="addAction('Viewed Class Standard Proficiency Report')">Class Standard Proficiency Report</a></li>
+                                        <li><a href="#report?v=Teacher_Class_Standard_Progress_View_Report&n=Class Standard Progress View Report" onclick="addAction('Viewed Class Standard Progress View Report')">Class Standard Progress View Report</a></li>
+                                        <li><a href=""><s>Student Progress Report</s></a></li>
+                                        <li><a href="#report?v=Teacher_Student_Standard_Progress_Report&n=Student Standard Progress Report" onclick="addAction('Viewed Student Standard Progress Report')">Student Standard Progress Report</a></li>
+                                        <li><a href="#report?v=Teacher_Item_Analysis_Report&n=Item Analysis Report" onclick="addAction('Viewed Item Analysis Report')">Item Analysis Report</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function addAction(a) {
+        var headers = {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        };
+        $.ajax({
+            type: 'POST',
+            url: "http://54.164.139.20:8080/api/addLog",
+            data: "id=" + window.localStorage['id'] + "&username=" + window.localStorage['userLogedIn'] + "&activity=" + a,
+            headers: headers
+        }).success(function (response) {
+        });
+
+    }
+
+
+</script>

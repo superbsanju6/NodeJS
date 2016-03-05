@@ -1,0 +1,324 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="test_Name_District_Administrator_School_Performance_by_Test">Test</label>
+            <input id="test_Name_District_Administrator_School_Performance_by_Test" type="multiselect" />
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport11()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button11">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerMasteryAdminSchoolPerformanceByTest"></div>
+<div id="District_Administrator_School_Performance_by_Test_DIV" class="reportContainer"></div>
+
+<script type='text/javascript'>
+    changeScroll();
+    var report11;
+    var viewReport11;
+    $(document).ready(function () {
+        sessionService();
+        //logReportMessage("Ran School Performance Report");
+        var report11FirstDisplay = true;
+        var reportUri11 = "/Polk/Reports/School__Teacher_Peformance_By_Test_Report";
+        var inputControls11;
+        var vv11;
+        var testNameG11 = '~NOTHING~';
+
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerMasteryAdminSchoolPerformanceByTest");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        viewReport11 = function () {
+            sessionService();
+           
+            if ($("#test_Name_District_Administrator_School_Performance_by_Test").combobox('getText') != "---" &&
+                $("#test_Name_District_Administrator_School_Performance_by_Test").combobox('getText').length > 0)
+            {
+
+                $("#spinnerMasteryAdminSchoolPerformanceByTest").show();
+                report11 = vv11.report({
+                    resource: "/Polk/Reports/School__Teacher_Peformance_By_Test_Report",
+                    container: "#District_Administrator_School_Performance_by_Test_DIV",
+                    params: getSelection11(),
+                    success: function () {
+                        $("#spinnerClassPerformanceReport").hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running School Performance Report");
+                        console.log(error);
+                    },
+                    events: {
+                        beforeRender: function (el) {
+                            //console.log(widgetHeightDefault);
+                            //$("#District_Administrator_School_Performance_by_Test_DIV").find("._jr_report_container_").css({
+
+                            //    //"max-height": widgetHeightDefault + "px",
+                            //    "overflow": "auto"
+                            //});
+                            $("#spinnerMasteryAdminSchoolPerformanceByTest").hide();
+
+                        }
+
+                    }
+                });
+                // }
+
+                var district_administrator_school_performance_by_test =
+                 {
+                     'district_administrator_school_performance_by_test': [{
+                         'param1': $("#test_Name_District_Administrator_School_Performance_by_Test").combobox('getValues')
+                     }]
+
+                 };
+                logReportMessage("Ran School Performance Report with following parameters: Test- " + $("#test_Name_District_Administrator_School_Performance_by_Test").combobox('getText'));
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].district_administrator_school_performance_by_test) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'district_administrator_school_performance_by_test': [{
+                                'param1': '',
+
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(district_administrator_school_performance_by_test);
+                console.log(oldLocalStorage);
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else {
+
+                alert("Please select all parameter in order to view Administrator School Performance by Test");
+            }
+
+
+        };
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+
+            vv11 = v;
+
+            inputControls11 = v.inputControls({
+                resource: reportUri11,
+                success: renderInputControls11,
+                error: function (error) {
+                    logReportMessage("Error Loading Input Controls For School Performance Report");
+                    console.log(error);
+                },
+            });
+            $('#test_Name_District_Administrator_School_Performance_by_Test').on("change", updateCascade11);
+
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select11 = buildControl("Export to: ", reportExports, 'select11'),
+            $button11 = $("#button11"),
+
+            $button11.click(function () {
+                sessionService();
+                console.log($select11.val());
+                report11.export({
+                    //export options here
+                    outputFormat: $select11.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button11"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection11() {
+
+            return {
+                "testName_1": $("#test_Name_District_Administrator_School_Performance_by_Test").combobox('getValues')
+
+            }
+        }
+        function updateCascade11() {
+            $("#spinnerMasteryAdminSchoolPerformanceByTest").show();
+            //testNameG11 = getSelection11().testName_1;
+            inputControls11
+                    .params(getSelection11())
+                    .run()
+                    .then(renderInputControls11)
+                    .then(function () {
+
+                        $('#spinnerMasteryAdminSchoolPerformanceByTest').hide();
+                    });
+        }
+        function showSpinner() {
+            $('#spinnerMasteryAdminSchoolPerformanceByTest').show();
+        }
+
+        var optionSelected11;
+        var k = 0;
+
+        function renderInputControls11(data) {
+            $("#test_Name_District_Administrator_School_Performance_by_Test").empty();
+
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+            if (report11FirstDisplay) {
+
+                getDataFromServer();
+            }
+
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'district_administrator_school_performance_by_test': [{
+                            'param1': ''
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                if (!report11FirstDisplay) {
+
+                    break;
+                }
+                if (oldLocalStorage[i].district_administrator_school_performance_by_test) {
+                    if (oldLocalStorage[i].district_administrator_school_performance_by_test[0].param1 == null) {
+
+                        break;
+                    }
+                    isInLocalStorage = true;
+                   
+
+
+
+                    TestInputControl = _.findWhere(data, { id: "testName_1" });
+                    var select = $("#test_Name_District_Administrator_School_Performance_by_Test");
+                    _.each(TestInputControl.state.options, function (option) {
+
+                        if (option.label == oldLocalStorage[i].district_administrator_school_performance_by_test[0].param1) {
+                            option.selected = true;
+
+                        }
+                        else {
+                            option.selected = false;
+
+                        }
+                    });
+                    $("#test_Name_District_Administrator_School_Performance_by_Test").combobox({
+                        data: TestInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false
+                    });
+
+                    report11FirstDisplay = false;
+                    viewReport11();
+                    break;
+
+                }
+
+            }
+
+            if (!isInLocalStorage) {
+
+
+                console.log(data);
+                var TestInputControl = _.findWhere(data, { id: "testName_1" });
+                var select = $("#test_Name_District_Administrator_School_Performance_by_Test");
+            //    _.each(TestInputControl.state.options, function (option) {
+
+           
+            //        select.append(
+            //"<option " +
+            //(option.selected ? "selected" : "") +
+            //" value='" + option.value + "'>"
+            //+ option.label + "</option>"
+            //);
+                //    });
+                $("#test_Name_District_Administrator_School_Performance_by_Test").combobox({
+                    data: TestInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false
+                });
+               
+              
+            }
+            report11FirstDisplay = false;
+            $("#spinnerMasteryAdminSchoolPerformanceByTest").hide();
+        }
+    });
+</script>

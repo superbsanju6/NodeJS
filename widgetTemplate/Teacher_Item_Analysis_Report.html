@@ -1,0 +1,587 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="teacher_item_analysis_district">Choose a District</label>
+            <input id="teacher_item_analysis_district" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="teacher_item_analysis_school">Choose a School</label>
+            <input id="teacher_item_analysis_school" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="teacher_item_analysis_teacher">Choose a Teacher</label>
+            <input id="teacher_item_analysis_teacher" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="teacher_item_analysis_class">Choose a Class</label>
+            <input id="teacher_item_analysis_class" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="teacher_item_analysis_test_type">Choose a Test Type</label>
+            <input id="teacher_item_analysis_test_type" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="teacher_item_analysis_test">Choose a Test</label>
+            <input id="teacher_item_analysis_test" />
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport30()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button30">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerTeacherItemAnalysisReport"></div>
+<div id="teacher_Item_Analysis_Report_DIV" class="reportContainer"></div>
+
+<script type='text/javascript'>
+    changeScroll();
+    var report30;
+    var viewReport30;
+    $(document).ready(function () {
+        sessionService();
+        //logReportMessage("Runned Item Analysis Report");
+        var reportUri30 = "/Polk_County__Studio_/Reports__Studio_/Teacher/Item_Analysis_Report";
+        var inputUri30 = "/Polk_County__Studio_/Reports__Studio_/Teacher/Item_Analysis_Report"
+        var  inputControls30;
+        var vv30;
+        var report30FirstDisplay = true;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerTeacherItemAnalysisReport");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        viewReport30 = function () {
+            sessionService();
+            if ($("#teacher_item_analysis_district").combobox('getText') != "---" && $("#teacher_item_analysis_district").combobox('getText').length > 0 &&
+                $("#teacher_item_analysis_school").combobox('getText') != "---" && $("#teacher_item_analysis_school").combobox('getText').length > 0 &&
+                $("#teacher_item_analysis_teacher").combobox('getText') != "---" && $("#teacher_item_analysis_teacher").combobox('getText').length > 0 &&
+                 $("#teacher_item_analysis_class").combobox('getText') != "---" && $("#teacher_item_analysis_class").combobox('getText').length > 0 &&
+                 $("#teacher_item_analysis_test_type").combobox('getText') != "---" && $("#teacher_item_analysis_test_type").combobox('getText').length > 0 &&
+                 $("#teacher_item_analysis_test").combobox('getText') != "---" && $("#teacher_item_analysis_test").combobox('getText').length > 0)
+            {
+
+                $("#spinnerTeacherItemAnalysisReport").show();
+                report30 = vv30.report({
+                    resource: "/Polk_County__Studio_/Reports__Studio_/Teacher/Item_Analysis_Report",
+                    container: "#teacher_Item_Analysis_Report_DIV",
+                    params: getSelection30(),
+                    success: function () {
+                        $("#spinnerTeacherItemAnalysisReport").hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running Item Analysis Report");
+                        console.log(error);
+                    }
+                    //,
+
+                    //events: {
+                    //    beforeRender: function (el) {
+                    //        console.log(widgetHeightDefault);
+                    //        $("#teacher_Item_Analysis_DIV").find("._jr_report_container_").css({
+
+                    //            "max-height": widgetHeightDefault + "px",
+                    //            "overflow": "auto"
+                    //        });
+                    //        $("#spinnerTeacherItemAnalysisReport").hide();
+
+                    //    }
+
+                    //}
+
+                });
+                var teacher_item_analysis_report_param =
+                 {
+                     'teacher_item_analysis_report_param': [{
+
+                         'param1': $("#teacher_item_analysis_district").combobox('getValue'),
+                         'param2': $("#teacher_item_analysis_school").combobox('getValue'),
+                         'param3': $("#teacher_item_analysis_teacher").combobox('getValue'),
+                         'param4': $("#teacher_item_analysis_class").combobox('getValue'),
+                         'param5': $("#teacher_item_analysis_test_type").combobox('getValue'),
+                         'param6': $("#teacher_item_analysis_test").combobox('getValue')
+                     }]
+
+                 };
+                //   logReportMessage("Runned Item Analysis Report");
+                logReportMessage("Ran Item Analysis Report with following parameters: District- " + $("#teacher_item_analysis_district").combobox('getText') +
+                  " School- " + $("#teacher_item_analysis_school").combobox('getText') +
+                  " Teacher- " + $("#teacher_item_analysis_teacher").combobox('getText') +
+                  " Class- " + $("#teacher_item_analysis_class").combobox('getText') +
+                  " Test Type- " + $("#teacher_item_analysis_test_type").combobox('getText') +
+                  " Test- " + $("#teacher_item_analysis_test").combobox('getText'));
+
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].teacher_item_analysis_report_param) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'teacher_item_analysis_report_param': [{
+                                'param1': '',
+                                'param2': '',
+                                'param3': '',
+                                'param4': '',
+                                'param5': '',
+                                'param6': ''
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(teacher_item_analysis_report_param);
+
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else {
+
+                alert("Please select all parameter in order to view Item Analysis Report");
+            }
+        };
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+            vv30 = v;
+            inputControls30 = v.inputControls({
+                resource: inputUri30,
+                success: renderInputControls30,
+                error: function (error) {
+                    logReportMessage("Error Loading Input Controls for Item Analysis Report");
+                    console.log(error);
+                }
+            });
+            //$('#teacher_item_analysis_district').on("change", updateCascade30);
+            //$('#teacher_item_analysis_school').on("change", updateCascade30);
+            //$('#teacher_item_analysis_teacher').on("change", updateCascade30);
+            //$('#teacher_item_analysis_class').on("change", updateCascade30);
+            //$('#teacher_item_analysis_test_type').on("change", updateCascade30);
+            //$('#teacher_item_analysis_test').on("change", updateCascade30);
+
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select30 = buildControl("Export to: ", reportExports, 'select30'),
+            $button30 = $("#button30"),
+
+            $button30.click(function () {
+                sessionService();
+                console.log($select30.val());
+                report30.export({
+                    //export options here
+                    outputFormat: $select30.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button30"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection30() {
+
+            return {
+                "districtId": $("#teacher_item_analysis_district").combobox('getValues'),
+                "schoolId": $("#teacher_item_analysis_school").combobox('getValues'),
+                "teacherId": $("#teacher_item_analysis_teacher").combobox('getValues'),
+                "classId": $("#teacher_item_analysis_class").combobox('getValues'),
+                "testType": $("#teacher_item_analysis_test_type").combobox('getValues'),
+                "testId": $("#teacher_item_analysis_test").combobox('getValues'),
+
+            }
+        }
+        function updateCascade30() {
+            $("#spinnerTeacherItemAnalysisReport").show();
+
+            inputControls30
+                    .params(getSelection30())
+                    .run()
+                    .then(renderInputControls30)
+                    .then(function () {
+
+                        $('#spinnerTeacherItemAnalysisReport').hide();
+                    });
+        }
+        function showSpinner() {
+            $('#spinnerTeacherItemAnalysisReport').show();
+        }
+        function renderInputControls30(data) {
+            $("#teacher_item_analysis_district").empty();
+            $("#teacher_item_analysis_school").empty();
+            $("#teacher_item_analysis_teacher").empty();
+            $("#teacher_item_analysis_class").empty();
+            $("#teacher_item_analysis_test_type").empty();
+            $("#teacher_item_analysis_test").empty();
+
+
+
+
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+            if (report30FirstDisplay) {
+
+                getDataFromServer();
+            }
+
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'teacher_item_analysis_report_param': [{
+                            'param1': '',
+                            'param2': '',
+                            'param3': '',
+                            'param4': '',
+                            'param5': '',
+                            'param6': ''
+
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                if (!report30FirstDisplay) {
+
+                    break;
+                }
+                if (oldLocalStorage[i].teacher_item_analysis_report_param) {
+                    if (oldLocalStorage[i].teacher_item_analysis_report_param[0].param1 == null ||
+                        oldLocalStorage[i].teacher_item_analysis_report_param[0].param2 == null ||
+                        oldLocalStorage[i].teacher_item_analysis_report_param[0].param3 == null ||
+                        oldLocalStorage[i].teacher_item_analysis_report_param[0].param4 == null ||
+                        oldLocalStorage[i].teacher_item_analysis_report_param[0].param5 == null ||
+                        oldLocalStorage[i].teacher_item_analysis_report_param[0].param6 == null) {
+                        break;
+                    }
+                    isInLocalStorage = true;
+                    //$("#teacher_item_analysis_district").val(oldLocalStorage[i].teacher_item_analysis_report_param[0].param1);
+                    //$("#teacher_item_analysis_school").val(oldLocalStorage[i].teacher_item_analysis_report_param[0].param2);
+                    //$("#teacher_item_analysis_teacher").val(oldLocalStorage[i].teacher_item_analysis_report_param[0].param3);
+                    //$("#teacher_item_analysis_class").val(oldLocalStorage[i].teacher_item_analysis_report_param[0].param4);
+                    //$("#teacher_item_analysis_test_type").val(oldLocalStorage[i].teacher_item_analysis_report_param[0].param5);
+                    //$("#teacher_item_analysis_test").val(oldLocalStorage[i].teacher_item_analysis_report_param[0].param6);
+
+
+
+                    var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                    var select = $("#teacher_item_analysis_district");
+                    _.each(DistrictInputControl.state.options, function (option) {
+                        if (option.value == oldLocalStorage[i].teacher_item_analysis_report_param[0].param1) {
+                            //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                            //    updateCascade1();
+                            option.selected = true;
+                        }
+                        else {
+                           // select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                            option.selected = false;
+                        }
+                    });
+                    $("#teacher_item_analysis_district").combobox({
+                        data: DistrictInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade30
+                    });
+
+
+                    // function
+                    inputControls30.params({
+                        "districtId": [oldLocalStorage[i].teacher_item_analysis_report_param[0].param1],
+                        "schoolId": [oldLocalStorage[i].teacher_item_analysis_report_param[0].param2],
+                        "teacherId": [oldLocalStorage[i].teacher_item_analysis_report_param[0].param3],
+                        "classId": [oldLocalStorage[i].teacher_item_analysis_report_param[0].param4],
+                        "testType": [oldLocalStorage[i].teacher_item_analysis_report_param[0].param5],
+                        "testId": [oldLocalStorage[i].teacher_item_analysis_report_param[0].param6]
+                    }).run(function (inputcontrolArray) {
+                        // debugger;
+
+
+                        var SchoolInputControl = _.findWhere(inputcontrolArray, { id: "schoolId" });
+                        var select = $("#teacher_item_analysis_school");
+                        _.each(SchoolInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_item_analysis_report_param[0].param2) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                // console.log("must be selected");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+
+                        });
+                        $("#teacher_item_analysis_school").combobox({
+                            data: SchoolInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade30
+                        });
+
+
+                        var TeacherInputControl = _.findWhere(inputcontrolArray, { id: "teacherId" });
+                        var select = $("#teacher_item_analysis_teacher");
+                        _.each(TeacherInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_item_analysis_report_param[0].param3) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                                // select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_item_analysis_teacher").combobox({
+                            data: TeacherInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade30
+                        });
+
+
+                        var ClassInputControl = _.findWhere(inputcontrolArray, { id: "classId" });
+                        var select = $("#teacher_item_analysis_class");
+                        _.each(ClassInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_item_analysis_report_param[0].param4) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_item_analysis_class").combobox({
+                            data: ClassInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade30
+                        });
+
+
+                        var TestTypeInputControl = _.findWhere(inputcontrolArray, { id: "testType" });
+                        var select = $("#teacher_item_analysis_test_type");
+                        _.each(TestTypeInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_item_analysis_report_param[0].param5) {
+                                // select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_item_analysis_test_type").combobox({
+                            data: TestTypeInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade30
+                        });
+
+
+                        var TestInputControl = _.findWhere(inputcontrolArray, { id: "testId" });
+                        var select = $("#teacher_item_analysis_test");
+                        _.each(TestInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_item_analysis_report_param[0].param6) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_item_analysis_test").combobox({
+                            data: TestInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade30
+                        });
+                        if (oldLocalStorage[i].teacher_item_analysis_report_param[0].param1 != '~NOTHING~'){
+                        viewReport30();}
+
+                    });
+
+
+                    report30FirstDisplay = false;
+
+                    break;
+
+                }
+
+            }
+
+            if (!isInLocalStorage) {
+
+                console.log(data);
+                var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                var select = $("#teacher_item_analysis_district");
+                $("#teacher_item_analysis_district").combobox({
+                    data: DistrictInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade30
+                });
+                //_.each(TestTypeInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+
+
+                //});
+                var SchoolInputControl = _.findWhere(data, { id: "schoolId" });
+                var select = $("#teacher_item_analysis_school");
+                $("#teacher_item_analysis_school").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade30
+                });
+                //_.each(TestInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+
+
+
+                var TeacherInputControl = _.findWhere(data, { id: "teacherId" });
+                var select = $("#teacher_item_analysis_teacher");
+                $("#teacher_item_analysis_teacher").combobox({
+                    data: TeacherInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade30
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+                var ClassInputControl = _.findWhere(data, { id: "classId" });
+                var select = $("#teacher_item_analysis_class");
+                $("#teacher_item_analysis_class").combobox({
+                    data: ClassInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade30
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+                var TestTypeInputControl = _.findWhere(data, { id: "testType" });
+                var select = $("#teacher_item_analysis_test_type");
+                $("#teacher_item_analysis_test_type").combobox({
+                    data: TestTypeInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade30
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+                var TestInputControl = _.findWhere(data, { id: "testId" });
+                var select = $("#teacher_item_analysis_test");
+                $("#teacher_item_analysis_test").combobox({
+                    data: TestInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade30
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+            }
+
+            report30FirstDisplay = false;
+            $("#spinnerTeacherItemAnalysisReport").hide();
+        }
+    });
+</script>
+
+

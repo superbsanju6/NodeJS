@@ -1,0 +1,106 @@
+﻿
+<select id="state_full_selector"></select>
+<select id="tropical_zodiac_selector"></select>
+<div id="spinnerStateZodiac"></div>
+<div id="containerStateZodiac" class="reportContainer"></div>
+
+
+<script src="http://jaspersoft.education-insights.com/jasperserver-pro/client/visualize.js"></script>
+<script type='text/javascript'>
+    changeScroll();
+    var reportUri = "/Adrian/State_Zodiac_Color_Report";
+    var reportstZ, inputControls;
+    var spinner = createSpinner();
+    function createSpinner() {
+        var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+        var container = $("#spinnerStateZodiac");
+        var spinner = new Spinner(opts).spin(container[0]);
+        $(container[0]).data('spinner', spinner);
+        return container;
+    }
+
+    visualize({
+        auth: {
+            name: "improve",
+            password: "improveamirotechapp"
+        }
+    }, function (v) {
+
+        inputControls = v.inputControls({
+            resource: reportUri,
+            success: renderInputControls
+        });
+        reportstZ = v.report({
+            resource: reportUri, container: '#containerStateZodiac', success: function () {
+                $("#spinnerStateZodiac").hide();
+                button.removeAttribute("disabled");
+            },
+            error: function (error) {
+                console.log(error);
+            },
+            events: {
+                beforeRender: function (el) {
+                    console.log(widgetHeightDefault);
+                    //$("#containerStateZodiac").find("._jr_report_container_").css({
+
+                    //    "max-height": widgetHeightDefault + "px",
+                    //    "overflow": "auto"
+                    //});
+                    $("#spinnerStateZodiac").hide();
+
+                }
+
+            }
+
+
+
+
+        });
+      
+        $('#state_full_selector').on("change", updateCascade);
+        $('#tropical_zodiac_selector').on("change", updateCascade);
+
+    });
+    function getSelection() {
+        return {
+            "StateFull_1": [$("#state_full_selector").val()],
+            "TropicalZodiac_1": [$("#tropical_zodiac_selector").val()]
+
+        }
+    }
+    function updateCascade() {
+        inputControls
+                .params(getSelection())
+                .run()
+                .then(showSpinner(),renderInputControls)
+                .then(function () {
+                    reportstZ.params(getSelection()).run();
+                    $("#spinnerStateZodiac").hide();
+                });
+    }
+    function showSpinner()
+    {
+        $("#spinnerStateZodiac").show();
+    }
+    function renderInputControls(data) {
+        $("#state_full_selector").empty();
+        $("#tropical_zodiac_selector").empty();
+
+        var StateFullMultiSelectInputControl = _.findWhere(data, { id: "StateFull_1" });
+        var select = $("#state_full_selector");
+        _.each(StateFullMultiSelectInputControl.state.options, function (option) {
+            select.append(
+    "<option " +
+    (option.selected ? "selected" : "") +
+    " value='" + option.value + "'>"
+    + option.label + "</option>"
+    );
+        });
+
+        var TropicalZodiacMultiSelectInputControl = _.findWhere(data, { id: "TropicalZodiac_1" });
+        var select = $("#tropical_zodiac_selector");
+        _.each(TropicalZodiacMultiSelectInputControl.state.options, function (option) {
+            select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+        }); 
+    }
+</script>

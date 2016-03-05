@@ -1,0 +1,756 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="district_standard_proficiency_district">Choose a District</label>
+            <input id="district_standard_proficiency_district">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="district_standard_proficiency_regions">Choose Regions</label>
+            <input id="district_standard_proficiency_regions">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="district_standard_proficiency_region_schools">Choose Region Schools</label>
+            <input id="district_standard_proficiency_region_schools">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="district_standard_proficiency_test_type">Choose a Test Type</label>
+            <input id="district_standard_proficiency_test_type">
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-2">
+        <div class="form-group-sm">
+            <label for="district_standard_proficiency_test">Choose a Test</label>
+            <input id="district_standard_proficiency_test">
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport36()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button36">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="spinnerNewDistrictStandardProficiency"></div>
+<div id="new_District_Standard_Proficiency_DIV" class="reportContainer"></div>
+
+<button id="btnForNewDistrictStandardProficiencyReportModal" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#infoNewDistrictStandardProficiencyReportAtClick" style="display:none;">Modal</button>
+
+<!-- Modal -->
+<div class="modal fade modal-drill" id="infoNewDistrictStandardProficiencyReportAtClick" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modalTitle">Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <!--<h5 style="color:transparent;" class="modal-title" id="myModalLabel">Drilled Report</h5>-->
+            </div>
+            <div class="modal-body" id="modalBodyNewDistrictStandardProficiencyReport">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!--<div id="drilldownreport" style="position:absolute;top:25%;left:25%;"></div>-->
+<!--<div class="row exportForm">
+    <div class="col-md-6">
+        <div class="form-group-sm">
+            <button id="button36">Export</button>
+        </div>
+    </div>
+</div>-->
+
+<script type='text/javascript'>
+    changeScroll();
+    //changeScrollModal();
+        
+        var viewReport36;
+        var report36;
+        $(document).ready(function () {
+            sessionService();
+           // logReportMessage("Ran District Standard Proficiency Report");
+            var reportUri36 = "/Polk_County_Reporting/Reports/District_Administrator/District_Standard_Proficiency";
+            var inputUri36 = "/Polk_County_Reporting/Reports/District_Administrator/District_Standard_Proficiency";
+            var inputControls36;
+            var vv36;
+            var report36FirstDisplay = true;
+            var spinner = createSpinner();
+            function createSpinner() {
+                var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+                var container = $("#spinnerNewDistrictStandardProficiency");
+                var spinner = new Spinner(opts).spin(container[0]);
+                $(container[0]).data('spinner', spinner);
+                return container;
+            }
+
+            var isButtonReport = false;
+
+            viewReport36 = function () {
+                sessionService();
+                if ($("#district_standard_proficiency_district").combobox('getText') != "---" && $("#district_standard_proficiency_district").combobox('getText').length > 0 &&
+              $("#district_standard_proficiency_regions").combobox('getText') != "---" && $("#district_standard_proficiency_regions").combobox('getText').length > 0 &&
+              $("#district_standard_proficiency_region_schools").combobox('getText') != "---" && $("#district_standard_proficiency_region_schools").combobox('getText').length > 0 &&
+               $("#district_standard_proficiency_test_type").combobox('getText') != "---" && $("#district_standard_proficiency_test_type").combobox('getText').length > 0 &&
+               $("#district_standard_proficiency_test").combobox('getText') != "---" && $("#district_standard_proficiency_test").combobox('getText').length > 0)
+                {
+
+                    $("#spinnerNewDistrictStandardProficiency").show();
+                    report36 = vv36.report({
+                        resource: "/Polk_County_Reporting/Reports/District_Administrator/District_Standard_Proficiency",
+                        container: "#new_District_Standard_Proficiency_DIV",
+                        params: getSelection36(),
+                        linkOptions: {
+                            beforeRender: function (linkToElemPairs) {
+                                linkToElemPairs.forEach(showCursor);
+                            },
+                            events: {
+                                "click": function (ev, link) {
+                                    $("#spinnerNewDistrictStandardProficiency").show();
+                                    sessionService();
+                                    if (link.type == "ReportExecution") {
+                                        vv36("#modalBodyNewDistrictStandardProficiencyReport").report({
+                                            resource: link.parameters._report,
+                                            params: {
+                                                "districtId": [link.parameters.districtId],
+                                                "region": [link.parameters.region],
+                                                "schoolIds": [link.parameters.schoolIds],
+                                                "testType": [link.parameters.testType],
+                                                "testId": [link.parameters.testId],
+
+                                                "schoolId": [link.parameters.schoolId],
+                                                "teacherId": [link.parameters.teacherId],
+                                                "classId": [link.parameters.classId],
+                                                "studentId": [link.parameters.studentId]
+                                                //parStoreId: [link.parameters.parStoreId],
+                                            },
+                                            linkOptions: {
+                                                beforeRender: function (linkToElemPairs) {
+                                                    linkToElemPairs.forEach(showCursor);
+                                                },
+                                                events: {
+                                                    "click": function (ev, link) {
+                                                        $("#spinnerNewDistrictStandardProficiency").show();
+                                                        sessionService();
+                                                        if (link.type == "ReportExecution") {
+                                                            vv36("#modalBodyNewDistrictStandardProficiencyReport").report({
+                                                                resource: link.parameters._report,
+                                                                params: {
+                                                                    "districtId": [link.parameters.districtId],
+                                                                    "region": [link.parameters.region],
+                                                                    "schoolIds": [link.parameters.schoolIds],
+                                                                    "testType": [link.parameters.testType],
+                                                                    "testId": [link.parameters.testId],
+
+                                                                    "schoolId": [link.parameters.schoolId],
+                                                                    "teacherId": [link.parameters.teacherId],
+                                                                    "classId": [link.parameters.classId],
+                                                                    "studentId": [link.parameters.studentId]
+                                                                    //parStoreId: [link.parameters.parStoreId],
+                                                                },
+                                                                linkOptions: {
+                                                                    beforeRender: function (linkToElemPairs) {
+                                                                        linkToElemPairs.forEach(showCursor);
+                                                                        $("#spinnerNewDistrictStandardProficiency").show();
+                                                                    },
+                                                                    events: {
+                                                                        "click": function (ev, link) {
+                                                                            $("#spinnerNewDistrictStandardProficiency").show();
+                                                                            sessionService();
+                                                                            if (link.type == "ReportExecution") {
+                                                                                vv36("#modalBodyNewDistrictStandardProficiencyReport").report({
+                                                                                    resource: link.parameters._report,
+                                                                                    params: {
+                                                                                        "districtId": [link.parameters.districtId],
+                                                                                        "region": [link.parameters.region],
+                                                                                        "schoolIds": [link.parameters.schoolIds],
+                                                                                        "testType": [link.parameters.testType],
+                                                                                        "testId": [link.parameters.testId],
+
+                                                                                        "schoolId": [link.parameters.schoolId],
+                                                                                        "teacherId": [link.parameters.teacherId],
+                                                                                        "classId": [link.parameters.classId],
+                                                                                        "studentId": [link.parameters.studentId]
+                                                                                        //parStoreId: [link.parameters.parStoreId],
+                                                                                    },
+                                                                                    linkOptions: {
+                                                                                        beforeRender: function (linkToElemPairs) {
+                                                                                            linkToElemPairs.forEach(showCursor);
+                                                                                        },
+                                                                                        events: {
+                                                                                            "click": function (ev, link) {
+                                                                                                $("#spinnerNewDistrictStandardProficiency").show();
+                                                                                                sessionService();
+                                                                                                if (link.type == "ReportExecution") {
+                                                                                                   
+                                                                                                    client.search({
+                                                                                                        index: 'allst',
+                                                                                                        size: 1,
+                                                                                                        body: {
+                                                                                                            "fields": ["studentId", "fullname"],
+                                                                                                            "query": {
+                                                                                                                "bool": {
+                                                                                                                    "must": [{
+                                                                                                                        "query_string": {
+                                                                                                                            "query": "studentId:" + link.parameters.studentId
+                                                                                                                        }
+                                                                                                                    }]
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }).then(function (response) {
+                                                                                                        for (var i in response.hits.hits) {
+                                                                                                            var fields = (response.hits.hits[i]).fields;
+
+                                                                                                            var tmpId = fields["studentId"];
+                                                                                                            console.log(tmpId[0]);
+                                                                                                            window.localStorage['stdId'] = tmpId[0];
+                                                                                                            window.localStorage['stdName'] = fields['fullname'][0];
+                                                                                                            $("#spinnerNewDistrictStandardProficiency").hide();
+                                                                                                            window.open('#/tabStudentProfile');
+
+                                                                                                        }
+
+                                                                                                    });
+                                                                                                  
+                                                                                                    //vv36("#modalBodyNewDistrictStandardProficiencyReport").report({
+                                                                                                    //    resource: link.parameters._report,
+                                                                                                    //    params: {
+                                                                                                    //        "districtId": [link.parameters.districtId],
+                                                                                                    //        "region": [link.parameters.region],
+                                                                                                    //        "schoolIds": [link.parameters.schoolIds],
+                                                                                                    //        "testType": [link.parameters.testType],
+                                                                                                    //        "testId": [link.parameters.testId],
+
+                                                                                                    //        "schoolId": [link.parameters.schoolId],
+                                                                                                    //        "teacherId": [link.parameters.teacherId],
+                                                                                                    //        "classId": [link.parameters.classId],
+                                                                                                    //        "studentId": [link.parameters.studentId]
+                                                                                                    //        //parStoreId: [link.parameters.parStoreId],
+                                                                                                    //    },
+                                                                                                    //    events: {
+                                                                                                    //        reportCompleted: function (status) {
+                                                                                                    //            $("#spinnerNewDistrictStandardProficiency").hide();
+                                                                                                    //            $('.modalTitle').html("Student Profile");
+                                                                                                    //            $("#infoNewDistrictStandardProficiencyReportAtClick .modal-dialog").removeClass("modal-lg").addClass("modal-md");
+                                                                                                    //            //$('#btnForNewDistrictStandardProficiencyReportModal').click();
+                                                                                                    //            //document.getElementById("infoNewDistrictStandardProficiencyReportAtClick").showModal();
+                                                                                                    //        }
+                                                                                                    //    },
+                                                                                                    //    error: function (error) {
+                                                                                                    //        logReportMessage("Error Running Student Profile From Modal");
+                                                                                                    //        console.log(error);
+                                                                                                    //    }
+
+                                                                                                    //});
+                                                                                                }
+                                                                                                console.log(link);
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                    events: {
+                                                                                        reportCompleted: function (status) {
+                                                                                            $("#spinnerNewDistrictStandardProficiency").hide();
+                                                                                            $('.modalTitle').html("Student Standard Proficiency");
+                                                                                            //$('#btnForNewDistrictStandardProficiencyReportModal').click();
+                                                                                            //document.getElementById("infoNewDistrictStandardProficiencyReportAtClick").showModal();
+                                                                                        }
+                                                                                    },
+                                                                                    error: function (error) {
+                                                                                        logReportMessage("Error Running Student Standard Proficiency From Modal");
+                                                                                        console.log(error);
+                                                                                    }
+
+                                                                                });
+                                                                            }
+                                                                            console.log(link);
+                                                                        }
+                                                                    }
+                                                                },
+                                                                events: {
+                                                                    reportCompleted: function (status) {
+                                                                        $("#spinnerNewDistrictStandardProficiency").hide();
+                                                                        $('.modalTitle').html("Class Standard Proficiency");
+                                                                        //$('#btnForNewDistrictStandardProficiencyReportModal').click();
+                                                                        //document.getElementById("infoNewDistrictStandardProficiencyReportAtClick").showModal();
+                                                                    }
+                                                                },
+                                                                error: function (error) {
+                                                                    logReportMessage("Error Running Class Standard Proficiency From Modal");
+                                                                    console.log(error);
+                                                                }
+
+                                                            });
+                                                        }
+                                                        console.log(link);
+                                                    }
+                                                }
+                                            },
+                                            events: {
+                                                reportCompleted: function (status) {
+                                                    $("#spinnerNewDistrictStandardProficiency").hide();
+                                                    $('.modalTitle').html("School Standard Proficiency");
+                                                    $("#infoNewDistrictStandardProficiencyReportAtClick .modal-dialog").removeClass("modal-md").addClass("modal-lg");
+                                                    $('#btnForNewDistrictStandardProficiencyReportModal').click();
+                                                    //document.getElementById("infoNewDistrictStandardProficiencyReportAtClick").showModal();
+                                                }
+                                            },
+                                            error: function (error) {
+                                                logReportMessage("Error Running School Standard Proficiency From Modal");
+                                                console.log(error);
+                                            }
+
+                                        });
+                                    }
+                                    console.log(link);
+                                }
+                            }
+                        },
+                        success: function () {
+                            $("#spinnerNewDistrictStandardProficiency").hide();
+
+                        },
+                        error: function (error) {
+                            logReportMessage("Error Running Standard Proficiency Report");
+                            console.log(error);
+                        }
+                        //,
+                        //events: {
+                        //    beforeRender: function (el) {
+                        //        console.log(widgetHeightDefault);
+                        //        $("#new_District_Standard_Proficiency_DIV").find("._jr_report_container_").css({
+                        //            "max-height": widgetHeightDefault + "px",
+                        //            "overflow": "auto"
+                        //        });
+                        //        $("#spinnerNewDistrictStandardProficiency").hide();
+                        //    }
+                        //}
+                    });
+
+
+                    var new_district_standard_proficiency_report_param =
+                      {
+                          'new_district_standard_proficiency_report_param': [{
+
+                              'param1': $("#district_standard_proficiency_district").combobox('getValue'),
+                              'param2': $("#district_standard_proficiency_regions").combobox('getValues'),
+                              'param3': $("#district_standard_proficiency_region_schools").combobox('getValues'),
+                              'param4': $("#district_standard_proficiency_test_type").combobox('getValue'),
+                              'param5': $("#district_standard_proficiency_test").combobox('getValue')
+                          }]
+
+                      };
+                    logReportMessage("Ran District Standard Proficiency Report with following parameters: District- " + $("#district_standard_proficiency_district").combobox('getText') +
+                        " Regions- " + $("#district_standard_proficiency_regions").combobox('getText') +
+                        " Region Schools- " + $("#district_standard_proficiency_region_schools").combobox('getText') +
+                        " Test Type- " + $("#district_standard_proficiency_test_type").combobox('getText') +
+                        " Test" + $("#district_standard_proficiency_test").combobox('getText'));
+                    var oldLocalStorage;
+                    if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                        oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                        for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                            if (oldLocalStorage[i].new_district_standard_proficiency_report_param) {
+                                oldLocalStorage.splice(i, 1);
+
+                            }
+
+                        }
+
+                    }
+                    else {
+                        var x = [
+                            {
+                                'new_district_standard_proficiency_report_param': [{
+                                    'param1': '',
+                                    'param2': '',
+                                    'param3': '',
+                                    'param4': '',
+                                    'param5': ''
+                                }]
+
+                            }
+                        ];
+                    }
+
+                    oldLocalStorage.push(new_district_standard_proficiency_report_param);
+
+                    var beforesave = JSON.stringify(oldLocalStorage);
+                    localStorage.setItem('storageParam', beforesave);
+                    saveToLocalStorage();
+                }
+                else {
+
+                    alert("Please select all parameter in order to view District Standard Proficiency Report");
+                }
+            };
+
+            function showCursor(pair) {
+
+                var el = pair.element;
+
+                el.style.cursor = "pointer";
+
+            }
+            visualize({
+                auth: {
+                    name: "improve",
+                    password: "improveamirotechapp"
+                }
+            }, function (v) {
+                vv36 = v;
+                inputControls36 = v.inputControls({
+                    resource: inputUri36,
+                    success: renderInputControls36,
+                    error: function (error) {
+                        logReportMessage("Error Loading Input Controls For Standard Proficiency Report");
+                        console.log(error);
+                    }
+                });
+
+                var reportExports = ["pdf", "xls", "csv", "docx"];
+                $select36 = buildControl("Export to: ", reportExports, 'select36');
+                $button36 = $("#button36");
+
+                $button36.click(function () {
+                    sessionService();
+                    console.log($select36.val());
+                    report36.export({
+                        //export options here
+                        outputFormat: $select36.val(),
+                        //exports all pages if not specified
+                        //pages: "1-2"
+                    }, function (link) {
+                        var url = link.href ? link.href : link;
+                        window.location.href = url;
+                    }, function (error) {
+                        console.log(error);
+                    });
+                });
+
+                function buildControl(name, options, selectID) {
+
+                    function buildOptions(options) {
+                        var template = "<option>{value}</option>";
+                        return options.reduce(function (memo, option) {
+                            return memo + template.replace("{value}", option);
+                        }, "")
+                    }
+
+                    var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                        content = template.replace("{label}", name)
+                            .replace("{options}", buildOptions(options));
+
+                    var $control = $(content);
+                    $control.insertAfter($("#button36"));
+                    //return select
+                    return $($control[1]);
+                }
+
+            });
+            function getSelection36() {
+
+                return {
+                    "districtId": $("#district_standard_proficiency_district").combobox('getValues'),
+                    "region": $("#district_standard_proficiency_regions").combobox('getValues'),
+                    "schoolIds": $("#district_standard_proficiency_region_schools").combobox('getValues'),
+                    "testType": $("#district_standard_proficiency_test_type").combobox('getValues'),
+                    "testId": $("#district_standard_proficiency_test").combobox('getValues')
+
+                }
+            }
+            function updateCascade36() {
+                $("#spinnerNewDistrictStandardProficiency").show();
+
+                inputControls36
+                        .params(getSelection36())
+                        .run()
+                        .then(renderInputControls36)
+                        .then(function () {
+
+                            $('#spinnerNewDistrictStandardProficiency').hide();
+                        });
+            }
+            function showSpinner() {
+                $('#spinnerNewDistrictStandardProficiency').show();
+            }
+            function renderInputControls36(data) {
+                
+                $("#district_standard_proficiency_district").empty();
+                $("#district_standard_proficiency_regions").empty();
+                $("#district_standard_proficiency_region_schools").empty();
+                $("#district_standard_proficiency_test_type").empty();
+                $("#district_standard_proficiency_test").empty();
+
+
+                var isInLocalStorage = false;
+                var oldLocalStorage;
+                if (report36FirstDisplay) {
+
+                    getDataFromServer();
+                }
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+                }
+                else {
+                    var x = [
+                        {
+                            'new_district_standard_proficiency_report_param': [{
+                                'param1': '',
+                                'param2': '',
+                                'param3': '',
+                                'param4': '',
+                                'param5': ''
+
+                            }]
+
+                        }
+                    ];
+
+                    var beforesave = JSON.stringify(x)
+                    localStorage.setItem("storageParam", beforesave);
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                }
+
+
+
+                for (var i = 0; i < oldLocalStorage.length; i++) {
+                    if (!report36FirstDisplay) {
+
+                        break;
+                    }
+
+
+
+                    if (oldLocalStorage[i].new_district_standard_proficiency_report_param) {
+                        if (oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param1 == null ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param2 == null ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param3 == null ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param4 == null ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param5 == null||
+
+                            oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param1 =='' ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param2 == '' ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param3 == '' ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param4 == '' ||
+                       oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param5 == ''
+                            ) {
+
+                            break;
+                        }
+
+                        isInLocalStorage = true;
+
+
+                        var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                        var select = $("#district_standard_proficiency_district");
+                        _.each(DistrictInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param1) {
+                                option.selected = true;
+                            }
+                            else {
+                                option.selected = false;
+                            }
+                        });
+                        $("#district_standard_proficiency_district").combobox({
+                            data: DistrictInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade36
+                        });
+
+
+                        // function
+                        inputControls36.params({
+                            "districtId": [oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param1],
+                            "region": oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param2,
+                            "schoolIds": oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param3,
+                            "testType": [oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param4],
+                            "testId": [oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param5]
+                        }).run(function (inputcontrolArray) {
+                            // debugger;
+
+
+                            var RegionInputControl = _.findWhere(inputcontrolArray, { id: "region" });
+                            var select = $("#district_standard_proficiency_regions");
+                            for (var k = 0; k < oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param2.length; k++) {
+                                _.each(RegionInputControl.state.options, function (option) {
+                                    if (!option.selected) {
+                                        if (option.value == oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param2[k]) {
+                                            option.selected = true;
+
+                                        }
+                                        else {
+                                            option.selected = false;
+                                        }
+                                    }
+                                });
+                            };
+                       
+                            $("#district_standard_proficiency_regions").combobox({
+                                data: RegionInputControl.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: true,
+                                onSelect: updateCascade36
+                            });
+
+                            var RegionSchoolsInputControl = _.findWhere(inputcontrolArray, { id: "schoolIds" });
+                            var select = $("#district_standard_proficiency_region_schools");
+                            for (var k = 0; k < oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param3.length; k++) {
+                                _.each(RegionSchoolsInputControl.state.options, function (option) {
+                                    if (!option.selected) {
+                                        if (option.value == oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param3[k]) {
+                                            option.selected = true;
+
+                                        }
+                                        else {
+                                            option.selected = false;
+                                        }
+                                    }
+                                   
+                                });
+                            };
+                            $("#district_standard_proficiency_region_schools").combobox({
+                                data: RegionSchoolsInputControl.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: true,
+                                onSelect: updateCascade36
+                            });
+
+                            var TestTypeInputControl = _.findWhere(inputcontrolArray, { id: "testType" });
+                            var select = $("#district_standard_proficiency_test_type");
+                            _.each(TestTypeInputControl.state.options, function (option) {
+                                if (option.value == oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param4) {
+                                    option.selected = true;
+
+                                }
+                                else {
+                                    option.selected = false;
+
+                                }
+
+
+                            });
+                            $("#district_standard_proficiency_test_type").combobox({
+                                data: TestTypeInputControl.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: false,
+                                onSelect: updateCascade36
+                            });
+
+                            var TestInputControl = _.findWhere(inputcontrolArray, { id: "testId" });
+                            var select = $("#district_standard_proficiency_test");
+                            _.each(TestInputControl.state.options, function (option) {
+                                if (option.value == oldLocalStorage[i].new_district_standard_proficiency_report_param[0].param5) {
+                                    option.selected = true;
+
+                                }
+                                else {
+                                    option.selected = false;
+
+                                }
+                            });
+                            $("#district_standard_proficiency_test").combobox({
+                                data: TestInputControl.state.options,
+                                valueField: 'value',
+                                textField: 'label',
+                                multiple: false,
+                                onSelect: updateCascade36
+                            });
+                           
+                            viewReport36();
+                        });
+                        report36FirstDisplay = false;
+
+                        break;
+
+                    }
+
+                }
+                if (!isInLocalStorage) {
+
+
+                    console.log(data);
+                    var DistrictInputControl = _.findWhere(data, { id: "districtId" });
+                    var select = $("#district_standard_proficiency_district");
+                    $("#district_standard_proficiency_district").combobox({
+                        data: DistrictInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade36
+                    });
+
+                    var RegionsControl = _.findWhere(data, { id: "region" });
+                    var select = $("#district_standard_proficiency_regions");
+                    $("#district_standard_proficiency_regions").combobox({
+                        data: RegionsControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: true,
+                        onSelect: updateCascade36
+                    });
+
+                    var RegionSchoolsInputControl = _.findWhere(data, { id: "schoolIds" });
+                    var select = $("#district_standard_proficiency_region_schools");
+                    $("#district_standard_proficiency_region_schools").combobox({
+                        data: RegionSchoolsInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: true,
+                        onSelect: updateCascade36
+                    });
+
+                    var TestTypeInputControl = _.findWhere(data, { id: "testType" });
+                    var select = $("#district_standard_proficiency_test_type");
+                   
+                    $("#district_standard_proficiency_test_type").combobox({
+                        data: TestTypeInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade36
+                    });
+
+                    var TestInputControl = _.findWhere(data, { id: "testId" });
+                    var select = $("#district_standard_proficiency_test");
+                    
+                    $("#district_standard_proficiency_test").combobox({
+                        data: TestInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade36
+                    });
+                }
+                report36FirstDisplay = false;
+                $("#spinnerNewDistrictStandardProficiency").hide();
+            }
+        });
+</script>

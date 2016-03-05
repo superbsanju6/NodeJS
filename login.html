@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Login | Spectaculearn</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400italic,700italic,300,700,300italic,400|Roboto+Condensed:300italic,400italic,700italic,400,700,300|Roboto+Mono:400,700|Roboto+Slab:400,300,700' rel='stylesheet' type='text/css'>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/style.css" rel="stylesheet" />
+    <link href="../css/font-awesome.min.css" rel="stylesheet" />
+    
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/angular.js"></script>
+    <script src="https://code.angularjs.org/1.3.0/angular-resource.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="js/login/app.js"></script>
+    <script src="multiLanguage/i18n.js"></script>
+    <style>
+        .help-block {
+        border-color:red;
+        }
+
+    </style>
+</head>
+
+
+<body ng-app="LoginModule" ng-controller="LoginController as login">
+    <div class="container loginForm">
+        <div class="row ">
+            <div class="col-md-6 col-lg-offset-3">
+                <img src="../images/spectaculearn-logo.png" style="height:72px;margin-bottom:60px;" class="center-block" />
+                <!--<div ng-show="error" class="alert alert-danger">{{error}}</div>-->
+                <div class="panel">
+                    <form name="frmLogin" class="text-center" ng-submit="Login()" novalidate>
+                        <div class="col-sm-12">
+                            <!--placeholder="username"-->
+                            <input type="text" name="username" ng-model="username" required placeholder="username" />
+                            <br />
+                            <!--<span ng-show="frmLogin.username.$error.required">Username is required</span>-->
+                        </div>
+                        <div class="col-sm-12">
+                            <!--placeholder="password"-->
+                            <input type="password" name="password" id="password" ng-model="password" required placeholder="password" />
+                            
+                        </div>
+                        <div class="checkbox col-sm-12">
+                            <label class="small">
+                                <input type="checkbox" /> Keep me logged in
+                            </label>
+                        </div>
+                        <div class="col-sm-12">
+                            <button type="submit" ng-disabled="frmLogin.$invalid"  class=" btn btn-primary btn-lg" style="width:312px">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <ul class="small text-center list-unstyled">
+                    <li><a href="#"> <i class="fa fa-lock"></i> Forgot Password?</a></li>
+                    <li><a href="#"> <i class="fa fa-user-plus"></i> New Account?</a></li>
+                    <li><a href="#"> <i class="fa fa-question"></i> Need Help?</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-12 text-center" style="margin-top:36px;">
+                <div class="text-center small">
+                    <p>Copyright © 2015 Amirotech Inc. All Rights Reserved</p>
+                    <p><a href="http://amirotech.com">amirotech.com</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

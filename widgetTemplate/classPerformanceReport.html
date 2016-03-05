@@ -1,0 +1,258 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_Name">Teacher</label>
+            <select id="teacher_Name"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="class_Name">Class</label>
+            <select id="class_Name"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="test_name">Test</label>
+            <select id="test_Name"></select>
+        </div>
+    </div>
+</div>
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <button class="viewRepBtn" id="buttonVR" onclick="viewReport14()">View Report</button>
+    </div>
+</div>
+<div id="spinnerClassPerformanceReport"></div>
+<div id="containerClassPerformanceReport" class="reportContainer"></div>
+<div class="row exportForm">
+    <div class="col-md-6">
+        <div class="form-group-sm">
+            <button id="button14">Export</button>
+        </div>
+    </div>
+</div>
+<script type='text/javascript'>
+    changeScroll();
+    var reportUri = "/Landon/ibtpClassPerformanceReportChart";
+    var report14, inputControls14;
+    var vv14;
+    var teacher_NameG14 = '0', class_NameG14 = '0', test_NameG14 = '0';
+    var teacher_NameG_Old14 = '0', class_NameG_Old14 = '0', test_NameG_Old14 = '0';
+    var spinner = createSpinner();
+    function createSpinner() {
+        var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+        var container = $("#spinnerClassPerformanceReport");
+        var spinner = new Spinner(opts).spin(container[0]);
+        $(container[0]).data('spinner', spinner);
+        return container;
+    }
+
+    var isButtonReport = false;
+
+    function viewReport14() {
+
+        if (teacher_NameG14 == '0' || class_NameG14 == '0' || test_NameG14 == '0') {
+            alert("Please select all the options.");
+        } else {
+            $("#spinnerClassPerformanceReport").show();
+            report14 = vv14.report({
+                resource: "/Landon/ibtpClassPerformanceReportChart",
+                container: "#containerClassPerformanceReport",
+                params: getSelection(),
+                success: function () {
+                    $("#spinnerClassPerformanceReport").hide();
+
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+    };
+
+
+    visualize({
+        auth: {
+            name: "improve",
+            password: "improveamirotechapp"
+        }
+    }, function (v) {
+
+        vv14 = v;
+        inputControls14 = v.inputControls({
+            resource: reportUri,
+            success: renderInputControls
+        });
+
+        $('#teacher_Name').on("change", updateCascade);
+        $('#class_Name').on("change", updateCascade);
+        $('#test_Name').on("change", updateCascade);
+
+
+
+        var reportExports = ["pdf", "xls", "csv", "docx"];
+        $select14 = buildControl("Export to: ", reportExports, 'select14'),
+        $button14 = $("#button14"),
+
+
+        $button14.click(function () {
+            console.log($select14.val());
+            report14.export({
+                //export options here
+                outputFormat: $select14.val(),
+                //exports all pages if not specified
+                //pages: "1-2"
+            }, function (link) {
+                var url = link.href ? link.href : link;
+                window.location.href = url;
+            }, function (error) {
+                console.log(error);
+            });
+        });
+
+        function buildControl(name, options, selectID) {
+
+            function buildOptions(options) {
+                var template = "<option>{value}</option>";
+                return options.reduce(function (memo, option) {
+                    return memo + template.replace("{value}", option);
+                }, "")
+            }
+
+            var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                content = template.replace("{label}", name)
+                    .replace("{options}", buildOptions(options));
+
+            var $control = $(content);
+            $control.insertBefore($("#button14"));
+            //return select
+            return $($control[1]);
+        }
+
+    });
+    function getSelection() {
+        return {
+            "teacherKey": [$("#teacher_Name").val()],
+            "classKey": [$("#class_Name").val()],
+            "ibtpTestKey": [$("#test_Name").val()]
+
+        }
+    }
+
+
+
+    function updateCascade() {
+        console.log("paramsUpdate");
+        $("#spinnerClassPerformanceReport").show();
+
+        teacher_NameG14 = getSelection().teacherKey;
+        class_NameG14 = getSelection().classKey;
+        test_NameG14 = getSelection().ibtpTestKey;
+
+        inputControls14
+                .params(getSelection())
+                .run()
+                .then(renderInputControls)
+                .then(function () {
+
+                    $("#spinnerClassPerformanceReport").hide();
+                });
+
+
+    }
+    function showSpinner() {
+        $("#spinnerClassPerformanceReport").show();
+    }
+
+    var optionSelected;
+    function renderInputControls(data) {
+
+        $("#test_Name").empty();
+        $("#class_Name").empty();
+        $("#teacher_Name").empty();
+        console.log(data);
+
+        if (parseInt(teacher_NameG14) != parseInt(teacher_NameG_Old14)) {
+            class_NameG14 = 0;
+            test_NameG14 = 0;
+        }
+
+        if (parseInt(class_NameG14) != parseInt(class_NameG_Old14)) {
+            test_NameG14 = 0;
+        }
+
+        // Teacher
+        var TeacherInputControl = _.findWhere(data, { id: "teacherKey" });
+        var select = $("#teacher_Name");
+
+        if (teacher_NameG14 == '0') {
+            optionSelected = true;
+        } else {
+            optionSelected = false;
+        }
+        select.append("<option " + (optionSelected ? "selected" : "") + " value='0'></option>");
+
+        _.each(TeacherInputControl.state.options, function (option) {
+            if (teacher_NameG14 == '0') {
+                optionSelected = false;
+            } else {
+                optionSelected = option.selected;
+            }
+
+            select.append("<option " + (optionSelected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+        });
+
+        // Class
+        var ClassInputControl = _.findWhere(data, { id: "classKey" });
+        var select = $("#class_Name");
+
+        if (class_NameG14 == '0') {
+            optionSelected = true;
+        } else {
+            optionSelected = false;
+        }
+        select.append("<option " + (optionSelected ? "selected" : "") + " value='0'></option>");
+
+        _.each(ClassInputControl.state.options, function (option) {
+            if (teacher_NameG14 != '0') {
+                if (class_NameG14 == '0') {
+                    optionSelected = false;
+                } else {
+                    optionSelected = option.selected;
+                }
+                select.append("<option " + (optionSelected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+            }
+        });
+
+        // Test
+        var TestInputControl = _.findWhere(data, { id: "ibtpTestKey" });
+        var select = $("#test_Name");
+
+        if (test_NameG14 == '0') {
+            optionSelected = true;
+        } else {
+            optionSelected = false;
+        }
+        select.append("<option " + (optionSelected ? "selected" : "") + " value='0'></option>");
+
+        _.each(TestInputControl.state.options, function (option) {
+            if ((teacher_NameG14 != '0') && (class_NameG14 != '0')) {
+                if (test_NameG14 == '0') {
+                    optionSelected = false;
+                } else {
+                    optionSelected = option.selected;
+                }
+                select.append("<option " + (optionSelected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+            }
+
+        });
+        $("#spinnerClassPerformanceReport").hide();
+
+        teacher_NameG_Old14 = teacher_NameG14;
+        class_NameG_Old14 = class_NameG14;
+        test_NameG_Old14 = test_NameG14;
+
+    }
+</script>

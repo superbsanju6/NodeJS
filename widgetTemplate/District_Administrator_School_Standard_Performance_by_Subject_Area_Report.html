@@ -1,0 +1,157 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="school_standard_performance_by_subject_area_report">School</label>
+            <select id="school_standard_performance_by_subject_area_report"></select>
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="subject_standard_performance_by_subject_area_report">Subject</label>
+            <select id="subject_standard_performance_by_subject_area_report"></select>
+        </div>
+    </div>
+</div>
+<div id="spinnerMasteryStandardPerformanceBySubjectAreaReport"></div>
+<div id="school_standard_performance_by_subject_area_report_DIV" class="reportContainer"></div>
+<div class="row exportForm">
+    <div class="col-md-6">
+        <div class="form-group-sm">
+            <button id="button12">Export</button>
+        </div>
+    </div>
+</div>
+
+
+<script type='text/javascript'>
+    changeScroll();
+    var reportUri12 = "/Polk/Reports/School_Standard_Performance_Report";
+    var report12, inputControls12;
+    var spinner = createSpinner();
+    function createSpinner() {
+        var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+        var container = $("#spinnerMasteryStandardPerformanceBySubjectAreaReport");
+        var spinner = new Spinner(opts).spin(container[0]);
+        $(container[0]).data('spinner', spinner);
+        return container;
+    }
+    visualize({
+        auth: {
+            name: "improve",
+            password: "improveamirotechapp"
+        }
+    }, function (v) {
+        inputControls12 = v.inputControls({
+            resource: reportUri12,
+            success: renderInputControls12
+        });
+        $('#school_standard_performance_by_subject_area_report').on("change", updateCascade12);
+        $('#subject_standard_performance_by_subject_area_report').on("change", updateCascade12);
+
+        var reportExports = ["pdf", "xls", "csv", "docx"];
+        $select12 = buildControl("Export to: ", reportExports, 'select12'),
+        $button12 = $("#button12"),
+        report12 = v.report({
+            resource: "/Polk/Reports/School_Standard_Performance_Report",
+            container: "#school_standard_performance_by_subject_area_report_DIV",
+            success: function () {
+
+                $('#spinnerMasteryStandardPerformanceBySubjectAreaReport').hide();
+
+            },
+            error: function (error) {
+                console.log(error);
+            },
+            events: {
+                beforeRender: function (el) {
+                    console.log(widgetHeightDefault);
+                    //$("#school_standard_performance_by_subject_area_report_DIV").find("._jr_report_container_").css({
+
+                    //    "max-height": widgetHeightDefault + "px",
+                    //    "overflow": "auto"
+                    //});
+                    $("#spinnerMasteryStandardPerformanceBySubjectAreaReport").hide();
+
+                }
+
+            }
+        });
+        $button12.click(function () {
+            console.log($select12.val());
+            report12.export({
+                //export options here
+                outputFormat: $select12.val(),
+                //exports all pages if not specified
+                //pages: "1-2"
+            }, function (link) {
+                var url = link.href ? link.href : link;
+                window.location.href = url;
+            }, function (error) {
+                console.log(error);
+            });
+        });
+
+        function buildControl(name, options, selectID) {
+
+            function buildOptions(options) {
+                var template = "<option>{value}</option>";
+                return options.reduce(function (memo, option) {
+                    return memo + template.replace("{value}", option);
+                }, "")
+            }
+
+            var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                content = template.replace("{label}", name)
+                    .replace("{options}", buildOptions(options));
+
+            var $control = $(content);
+            $control.insertBefore($("#button12"));
+            //return select
+            return $($control[1]);
+        }
+
+    });
+    function getSelection12() {
+
+        return {
+            "School_1": [$("#school_standard_performance_by_subject_area_report").val()],
+            "subject_1": [$("#subject_standard_performance_by_subject_area_report").val()]
+
+        }
+    }
+    function updateCascade12() {
+        inputControls12
+                .params(getSelection12())
+                .run()
+                .then(showSpinner(), renderInputControls12)
+                .then(function () {
+
+                    report12.params(getSelection12()).run();
+                    $('#spinnerMasteryStandardPerformanceBySubjectAreaReport').hide();
+                });
+    }
+    function showSpinner() {
+        $('#spinnerMasteryStandardPerformanceBySubjectAreaReport').show();
+    }
+    function renderInputControls12(data) {
+        $("#school_standard_performance_by_subject_area_report").empty();
+        $("#subject_standard_performance_by_subject_area_report").empty();
+        console.log(data);
+        var TestInputControl = _.findWhere(data, { id: "School_1" });
+        var select = $("#school_standard_performance_by_subject_area_report");
+        _.each(TestInputControl.state.options, function (option) {
+            select.append(
+    "<option " +
+    (option.selected ? "selected" : "") +
+    " value='" + option.value + "'>"
+    + option.label + "</option>"
+    );
+        });
+
+        var SchoolInputControl = _.findWhere(data, { id: "subject_1" });
+        var select = $("#subject_standard_performance_by_subject_area_report");
+        _.each(SchoolInputControl.state.options, function (option) {
+            select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+        });
+    }
+</script>

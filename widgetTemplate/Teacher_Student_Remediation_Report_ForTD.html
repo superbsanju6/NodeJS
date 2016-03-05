@@ -1,0 +1,573 @@
+﻿<div class="row chartFilters">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_test_typeW6">Select Test Type</label>
+            <input id="teacher_dashboard_test_typeW6" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_testW6">Select Test</label>
+            <input id="teacher_dashboard_testW6" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_schoolW6">Select School</label>
+            <input id="teacher_dashboard_schoolW6" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_teacherW6">Select Teacher</label>
+            <input id="teacher_dashboard_teacherW6" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_classW6">Select Class</label>
+            <input id="teacher_dashboard_classW6" />
+        </div>
+    </div>
+    <div class="col-xs-6 col-sm-4 col-md-3 col-xl-3">
+        <div class="form-group-sm">
+            <label for="teacher_dashboard_studentW6">Select Student</label>
+            <input id="teacher_dashboard_studentW6" />
+        </div>
+    </div>
+</div>
+
+<div class="row chartUpperBtns">
+    <div class="col-md-12 clearfix">
+        <div class="row newExportForm">
+            <div class="col-md-12">
+                <div class="form-inline text-right">
+                    <div class="form-group">
+                        <button class="viewRepBtn" id="buttonVR" onclick="viewReport29()">View Report</button>
+                    </div>
+                    <div class="form-group">
+                        <button class="exportRepBtn" id="button29">Export</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerStudentRemediationReportD"></div>
+<div id="teacher_Student_Remediation_Report_DashDIV" class="reportContainer reportShorter"></div>
+
+<script type='text/javascript'>
+    changeScroll();
+    var report29;
+    var viewReport29;
+    $(document).ready(function () {
+        sessionService();
+        //logReportMessage("Runned Student Remediation Report");
+        var reportUri29 = "/Polk_County__Studio_/Reports__Studio_/Teacher/StudentRemediationReport";
+        var inputUri29 = "/Polk_County__Studio_/Reports__Studio_/Teacher/StudentRemediationReport"
+        var  inputControls29;
+        var vv29;
+        var report29FirstDisplay = true;
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerStudentRemediationReportD");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        }
+
+        var isButtonReport = false;
+
+        viewReport29 = function () {
+            sessionService();
+            if ($("#teacher_dashboard_test_typeW6").combobox('getText') != "---" && $("#teacher_dashboard_test_typeW6").combobox('getText').length > 0 &&
+                 $("#teacher_dashboard_testW6").combobox('getText') != "---" && $("#teacher_dashboard_testW6").combobox('getText').length > 0 &&
+                 $("#teacher_dashboard_schoolW6").combobox('getText') != "---" && $("#teacher_dashboard_schoolW6").combobox('getText').length > 0 &&
+                 $("#teacher_dashboard_teacherW6").combobox('getText') != "---" && $("#teacher_dashboard_teacherW6").combobox('getText').length > 0 &&
+                 $("#teacher_dashboard_classW6").combobox('getText') != "---" && $("#teacher_dashboard_classW6").combobox('getText').length > 0 &&
+                 $("#teacher_dashboard_studentW6").combobox('getText') != "---" && $("#teacher_dashboard_studentW6").combobox('getText').length > 0)
+            {
+                $("#spinnerStudentRemediationReportD").show();
+                report29 = vv29.report({
+                    resource: "/Polk_County__Studio_/Reports__Studio_/Teacher/StudentRemediationReport",
+                    container: "#teacher_Student_Remediation_Report_DashDIV",
+                    params: getSelection29(),
+                    success: function () {
+                        $("#spinnerStudentRemediationReportD").hide();
+
+                    },
+                    error: function (error) {
+                        logReportMessage("Error Running Student Remediation Report");
+                        console.log(error);
+                    }
+                   
+                });
+                var teacher_student_remediation_report_fortd_param =
+                 {
+                     'teacher_student_remediation_report_fortd_param': [{
+
+                         'param1': $("#teacher_dashboard_test_typeW6").combobox('getValue'),
+                         'param2': $("#teacher_dashboard_testW6").combobox('getValue'),
+                         'param3': $("#teacher_dashboard_schoolW6").combobox('getValue'),
+                         'param4': $("#teacher_dashboard_teacherW6").combobox('getValue'),
+                         'param5': $("#teacher_dashboard_classW6").combobox('getValue'),
+                         'param6': $("#teacher_dashboard_studentW6").combobox('getValue')
+                     }]
+
+                 };
+                // logReportMessage("Runned Student Remediation Report");
+                logReportMessage("Ran Student Remediation Report with following parameters: Test Type- " + $("#teacher_dashboard_test_typeW6").combobox('getText') +
+                 " Test- " + $("#teacher_dashboard_testW6").combobox('getText') +
+                 " School- " + $("#teacher_dashboard_schoolW6").combobox('getText') +
+                  " Teacher- " + $("#teacher_dashboard_teacherW6").combobox('getText') +
+                  " Class- " + $("#teacher_dashboard_classW6").combobox('getText') +
+                  " Student- " + $("#teacher_dashboard_studentW6").combobox('getText'));
+
+
+                var oldLocalStorage;
+                if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                    oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+                    for (var i = oldLocalStorage.length - 1; i >= 0; i--) {
+                        if (oldLocalStorage[i].teacher_student_remediation_report_fortd_param) {
+                            oldLocalStorage.splice(i, 1);
+
+                        }
+
+                    }
+
+                }
+                else {
+                    var x = [
+                        {
+                            'teacher_student_remediation_report_fortd_param': [{
+                                'param1': '',
+                                'param2': '',
+                                'param3': '',
+                                'param4': '',
+                                'param5': '',
+                                'param6': ''
+                            }]
+
+                        }
+                    ];
+                }
+
+                oldLocalStorage.push(teacher_student_remediation_report_fortd_param);
+
+                var beforesave = JSON.stringify(oldLocalStorage);
+                localStorage.setItem('storageParam', beforesave);
+                saveToLocalStorage();
+            }
+            else
+            {
+                alert("Please select all parameter in order to view Student Remediation Report");
+            }
+        };
+
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        }, function (v) {
+            vv29 = v;
+            inputControls29 = v.inputControls({
+                resource: inputUri29,
+                success: renderInputControls29,
+                error: function (error) {
+                    logReportMessage("Error Loading Input Controls For Student Remediation Report");
+                    console.log(error);
+                }
+            });
+            //$('#teacher_dashboard_test_typeW6').on("change", updateCascade29);
+            //$('#teacher_dashboard_testW6').on("change", updateCascade29);
+            //$('#teacher_dashboard_schoolW6').on("change", updateCascade29);
+            //$('#teacher_dashboard_teacherW6').on("change", updateCascade29);
+            //$('#teacher_dashboard_classW6').on("change", updateCascade29);
+            //$('#teacher_dashboard_studentW6').on("change", updateCascade29);
+
+            //$("#teacher_Student_Remediation_Report_DashDIV").hide();
+
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $select29 = buildControl("Export to: ", reportExports, 'select29'),
+            $button29 = $("#button29"),
+
+            $button29.click(function () {
+                sessionService();
+                console.log($select29.val());
+                report29.export({
+                    //export options here
+                    outputFormat: $select29.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+
+            function buildControl(name, options, selectID) {
+
+                function buildOptions(options) {
+                    var template = "<option>{value}</option>";
+                    return options.reduce(function (memo, option) {
+                        return memo + template.replace("{value}", option);
+                    }, "")
+                }
+
+                var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                    content = template.replace("{label}", name)
+                        .replace("{options}", buildOptions(options));
+
+                var $control = $(content);
+                $control.insertBefore($("#button29"));
+                //return select
+                return $($control[1]);
+            }
+
+        });
+        function getSelection29() {
+
+            return {
+                "testType": $("#teacher_dashboard_test_typeW6").combobox('getValues'),
+                "testId": $("#teacher_dashboard_testW6").combobox('getValues'),
+                "schoolId": $("#teacher_dashboard_schoolW6").combobox('getValues'),
+                "teacherId": $("#teacher_dashboard_teacherW6").combobox('getValues'),
+                "classId": $("#teacher_dashboard_classW6").combobox('getValues'),
+                "studentId": $("#teacher_dashboard_studentW6").combobox('getValues'),
+
+            }
+        }
+        function updateCascade29() {
+            $("#spinnerStudentRemediationReportD").show();
+
+            inputControls29
+                    .params(getSelection29())
+                    .run()
+                    .then(renderInputControls29)
+                    .then(function () {
+
+                        $('#spinnerStudentRemediationReportD').hide();
+                    });
+        }
+        function showSpinner() {
+            $('#spinnerStudentRemediationReportD').show();
+        }
+        function renderInputControls29(data) {
+            $("#teacher_dashboard_test_typeW6").empty();
+            $("#teacher_dashboard_testW6").empty();
+            $("#teacher_dashboard_schoolW6").empty();
+            $("#teacher_dashboard_teacherW6").empty();
+            $("#teacher_dashboard_classW6").empty();
+            $("#teacher_dashboard_studentW6").empty();
+
+
+
+
+            var isInLocalStorage = false;
+            var oldLocalStorage;
+            if (report29FirstDisplay) {
+
+                getDataFromServer();
+            }
+
+            if (localStorage.getItem('storageParam') && localStorage.getItem('storageParam') != null && localStorage.getItem('storageParam') != '\"\"') {
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+            }
+            else {
+                var x = [
+                    {
+                        'teacher_student_remediation_report_fortd_param': [{
+                            'param1': '',
+                            'param2': '',
+                            'param3': '',
+                            'param4': '',
+                            'param5': '',
+                            'param6': ''
+
+                        }]
+
+                    }
+                ];
+
+                var beforesave = JSON.stringify(x)
+                localStorage.setItem("storageParam", beforesave);
+                oldLocalStorage = JSON.parse(localStorage.getItem('storageParam'));
+
+            }
+
+            for (var i = 0; i < oldLocalStorage.length; i++) {
+                if (!report29FirstDisplay) {
+
+                    break;
+                }
+                if (oldLocalStorage[i].teacher_student_remediation_report_fortd_param) {
+                    if (oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param1 == null ||
+                        oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param2 == null ||
+                        oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param3 == null ||
+                        oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param4 == null ||
+                        oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param5 == null ||
+                        oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param6 == null) {
+                        break;
+                    }
+                    isInLocalStorage = true;
+                    //$("#teacher_dashboard_test_typeW6").val(oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param1);
+                    //$("#teacher_dashboard_testW6").val(oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param2);
+                    //$("#teacher_dashboard_schoolW6").val(oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param3);
+                    //$("#teacher_dashboard_teacherW6").val(oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param4);
+                    //$("#teacher_dashboard_classW6").val(oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param5);
+                    //$("#teacher_dashboard_studentW6").val(oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param6);
+
+
+
+                    var TestTypeInputControl = _.findWhere(data, { id: "testType" });
+                    var select = $("#teacher_dashboard_test_typeW6");
+                    _.each(TestTypeInputControl.state.options, function (option) {
+                        if (option.value == oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param1) {
+                            //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                            //    updateCascade1();
+                            option.selected = true;
+                        }
+                        else {
+                           // select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                            option.selected = false;
+                        }
+                    });
+                    $("#teacher_dashboard_test_typeW6").combobox({
+                        data: TestTypeInputControl.state.options,
+                        valueField: 'value',
+                        textField: 'label',
+                        multiple: false,
+                        onSelect: updateCascade29
+                    });
+
+
+                    // function
+                    inputControls29.params({
+                        "testType": [oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param1],
+                        "testId": [oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param2],
+                        "schoolId": [oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param3],
+                        "teacherId": [oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param4],
+                        "classId": [oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param5],
+                        "studentId": [oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param6]
+                    }).run(function (inputcontrolArray) {
+                        // debugger;
+
+
+                        var TestInputControl = _.findWhere(inputcontrolArray, { id: "testId" });
+                        var select = $("#teacher_dashboard_testW6");
+                        _.each(TestInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param2) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                // console.log("must be selected");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+
+                        });
+                        $("#teacher_dashboard_testW6").combobox({
+                            data: TestInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade29
+                        });
+
+
+                        var SchoolInputControl = _.findWhere(inputcontrolArray, { id: "schoolId" });
+                        var select = $("#teacher_dashboard_schoolW6");
+                        _.each(SchoolInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param3) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                               // select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_dashboard_schoolW6").combobox({
+                            data: SchoolInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade29
+                        });
+
+
+                        var SchoolInputControl = _.findWhere(inputcontrolArray, { id: "teacherId" });
+                        var select = $("#teacher_dashboard_teacherW6");
+                        _.each(SchoolInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param4) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_dashboard_teacherW6").combobox({
+                            data: SchoolInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade29
+                        });
+
+
+                        var SchoolInputControl = _.findWhere(inputcontrolArray, { id: "classId" });
+                        var select = $("#teacher_dashboard_classW6");
+                        _.each(SchoolInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param5) {
+                               // select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_dashboard_classW6").combobox({
+                            data: SchoolInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade29
+                        });
+
+
+                        var SchoolInputControl = _.findWhere(inputcontrolArray, { id: "studentId" });
+                        var select = $("#teacher_dashboard_studentW6");
+                        _.each(SchoolInputControl.state.options, function (option) {
+                            if (option.value == oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param6) {
+                                //select.append("<option  selected value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = true;
+                            }
+                            else {
+                                //select.append("<option value='" + option.value + "'>" + option.label + "</option>");
+                                option.selected = false;
+                            }
+                        });
+                        $("#teacher_dashboard_studentW6").combobox({
+                            data: SchoolInputControl.state.options,
+                            valueField: 'value',
+                            textField: 'label',
+                            multiple: false,
+                            onSelect: updateCascade29
+                        });
+                        if (oldLocalStorage[i].teacher_student_remediation_report_fortd_param[0].param1 != '~NOTHING~'){
+                        viewReport29();}
+               
+                    });
+                    
+                    
+                    report29FirstDisplay = false;
+
+                    break;
+
+                }
+
+            }
+
+            if (!isInLocalStorage) {
+
+                console.log(data);
+                var TestTypeInputControl = _.findWhere(data, { id: "testType" });
+                var select = $("#teacher_dashboard_test_typeW6");
+                $("#teacher_dashboard_test_typeW6").combobox({
+                    data: TestTypeInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade29
+                });
+                //_.each(TestTypeInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+
+
+                //});
+                var TestInputControl = _.findWhere(data, { id: "testId" });
+                var select = $("#teacher_dashboard_testW6");
+                $("#teacher_dashboard_testW6").combobox({
+                    data: TestInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade29
+                });
+                //_.each(TestInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+
+
+
+                var SchoolInputControl = _.findWhere(data, { id: "schoolId" });
+                var select = $("#teacher_dashboard_schoolW6");
+                $("#teacher_dashboard_schoolW6").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade29
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+                var SchoolInputControl = _.findWhere(data, { id: "teacherId" });
+                var select = $("#teacher_dashboard_teacherW6");
+                $("#teacher_dashboard_teacherW6").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade29
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+                var SchoolInputControl = _.findWhere(data, { id: "classId" });
+                var select = $("#teacher_dashboard_classW6");
+                $("#teacher_dashboard_classW6").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade29
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+
+                var SchoolInputControl = _.findWhere(data, { id: "studentId" });
+                var select = $("#teacher_dashboard_studentW6");
+                $("#teacher_dashboard_studentW6").combobox({
+                    data: SchoolInputControl.state.options,
+                    valueField: 'value',
+                    textField: 'label',
+                    multiple: false,
+                    onSelect: updateCascade29
+                });
+                //_.each(SchoolInputControl.state.options, function (option) {
+                //    select.append("<option " + (option.selected ? "selected" : "") + " value='" + option.value + "'>" + option.label + "</option>");
+                //});
+            }
+
+            report29FirstDisplay = false;
+            $("#spinnerStudentRemediationReportD").hide();
+        }
+    });
+</script>
+
+

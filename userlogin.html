@@ -1,0 +1,42 @@
+﻿<div class="row hidden-md hidden-xs hidden-sm" style="height:10px;"></div>
+<div class="toCenter">
+    <div class="container loginForm center-block">
+        <div class="row ">
+            <div class="col-md-6 col-sm-4 artworkLogin hidden-xs ">
+                &nbsp;
+            </div>
+            <div class="col-sm-8 col-md-6 theLoginForm">
+                <form name="frmLogin" class="frmLogin" ng-submit="Login()" novalidate>
+                    <div class="form-group">
+                        <label>*User ID: </label>
+                        <input type="text" name="username" ng-model="username" required placeholder="username" /><br />
+                        <span ng-if="frmLogin.username.$dirty && frmLogin.username.$error.required" style="color:red">Username is required!</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>*Password: </label>
+                        <input type="password" name="password" id="password" ng-model="password" required placeholder="password" /><br />
+                        <span ng-if="frmLogin.password.$dirty && frmLogin.password.$error.required" style="color:red">Password is required!</span>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="login_button btn btn-default btn-sm">LOGIN</button>
+                    </div>
+                    <br style="clear:both" />
+                    <ul class="list-unstyled list-inline">
+                        <li><a href="">First Time Login Help</a></li>
+                        <li><a>|</a></li>
+                        <li><a href="">Forgot Password?</a></li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer class="footer footerLogin">
+        <!--<footer class="footer" ng-show="showHeader">-->
+        <div class="footerContent">
+            <p>© Copyright 2015, Polk County School District. powered by <a href="#">Blender</a>. All Rights Reserved.</p>
+            <p>Need help or technical support? <a href="#">Contact Support.</a></p>
+        </div>
+    </footer>
+</div>

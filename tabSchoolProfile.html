@@ -1,0 +1,114 @@
+﻿
+
+<div class="row theReport">
+    <div class="col-md-12">
+        <div class="panel">
+            <div id="reportName" class="panel-heading">School Profile</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row chartUpperBtns" style="margin-top:12px;">
+                            <div class="col-md-12 clearfix">
+                                <div class="row newExportForm">
+                                    <div class="col-md-12">
+                                        <div class="form-inline text-right">
+                                            <div class="form-group">
+                                                <button class="exportRepBtn" id="button102">Export</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div id="containerTabSchool" class="reportContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="spinnerTabSchoolProfile"></div>
+<script type='text/javascript'>
+
+    $(document).ready(function () {
+        var str = window.localStorage['schName'];
+        str = str.split("(")[0];
+        document.title = str;
+        //document.title = window.localStorage['stdName'];
+        sessionService();
+        $('#reportName').html(window.localStorage['schName']);
+        logReportMessage("Ran School Profile Report");
+        var schId = window.localStorage['schId'];
+        console.log(schId);
+        var spinner = createSpinner();
+        function createSpinner() {
+            var opts = { lines: 9, length: 16, width: 10, radius: 24, corners: 0, rotate: 0, direction: 1, color: '#fff', speed: 1, trail: 66, shadow: false, hwaccel: false, zIndex: 2e9, top: '50%', left: '50%', className: 'spinner', scale: 0.5 };
+            var container = $("#spinnerTabSchoolProfile");
+            var spinner = new Spinner(opts).spin(container[0]);
+            $(container[0]).data('spinner', spinner);
+            return container;
+        };
+        visualize({
+            auth: {
+                name: "improve",
+                password: "improveamirotechapp"
+            }
+        },
+        function (v) {
+            report102 = v.report({
+                resource: "/Polk_County_Reporting/Reports/School_Administrator/School_Profile",
+                container: "#containerTabSchool",
+                params: getSelection102(),
+                success: function () {
+                    $("#spinnerTabSchoolProfile").hide();
+                },
+                error: function (error) {
+                    logReportMessage("Error Running School Profile Report");
+                    console.log(error);
+                }
+            });//map_canvas_2010355477
+            var reportExports = ["pdf", "xls", "csv", "docx"];
+            $selectSchool = buildControl("Export to: ", reportExports, 'selectSchool');
+            $button102 = $("#button102");
+            $button102.click(function () {
+                sessionService();
+                console.log($selectSchool.val());
+                report102.export({
+                    //export options here
+                    outputFormat: $selectSchool.val(),
+                    //exports all pages if not specified
+                    //pages: "1-2"
+                }, function (link) {
+                    var url = link.href ? link.href : link;
+                    window.location.href = url;
+                }, function (error) {
+                    console.log(error);
+                });
+            });
+            function getSelection102() {
+                return {
+                    "schoolId": [schId]
+                }
+            }
+        }
+        );
+        function buildControl(name, options, selectID) {
+            function buildOptions(options) {
+                var template = "<option>{value}</option>";
+                return options.reduce(function (memo, option) {
+                    return memo + template.replace("{value}", option);
+                }, "")
+            }
+            var template = "<label>{label}</label><select id='" + selectID + "'>{options}</select>",
+                content = template.replace("{label}", name)
+                    .replace("{options}", buildOptions(options));
+
+            var $control = $(content);
+            $control.insertAfter($("#button102"));
+            //return select
+            return $($control[1]);
+        }
+    });
+</script>
